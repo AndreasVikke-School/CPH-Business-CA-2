@@ -2,6 +2,11 @@
 ## Make sure to rename the database name in the CREATE DATABASE script below to the SAME name as used for your local tests
 ---
 
+branches:
+  only:
+  - master
+  - stable
+
 dist: bionic
 
 language: java
@@ -11,6 +16,7 @@ cache:
     - $HOME/.m2
 
 script:
+  - cd CA2-Backend
   - mvn test
   - mvn -Dremote.user=$REMOTE_USER -Dremote.password=$REMOTE_PW tomcat7:deploy
 
@@ -18,6 +24,7 @@ services:
    - mysql
 
 before_script:
+
 
 # TODO Add variable to make it simple to be reusable for all semester projects
 #- export DEBIAN_FRONTEND="noninteractive";

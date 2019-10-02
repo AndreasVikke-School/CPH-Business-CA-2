@@ -1318,9 +1318,7 @@
           "format" : "int64"
         },
         "infoEntity" : {
-          "items" : {
-            "$ref" : "#/definitions/InfoEntity"
-          }
+          "$ref" : "#/definitions/InfoEntity"
         }
       }
     },

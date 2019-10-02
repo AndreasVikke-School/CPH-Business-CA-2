@@ -1,0 +1,1021 @@
+swagger: '2.0'
+info:
+  version: "1.1"
+  title: 'Course Assignment 2'
+  description: 'CA-2 API documentation'
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /Out-of-Memory/CourseAssignmentTwo/1
+schemes:
+ - https
+ 
+paths:
+# Person
+  /person:
+    post:
+      tags:
+      - "person"
+      summary: "Add a new person"
+      description: ""
+      operationId: "addPerson"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Person object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Person"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Person'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    put:
+      tags:
+      - "person"
+      summary: "Edit a person"
+      description: ""
+      operationId: "editPerson"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Person object that needs to be edited"
+        required: true
+        schema:
+          $ref: "#/definitions/Person"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Person not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /person/all:
+    get:
+      tags:
+      - "person"
+      summary: "Get all persons"
+      description: ""
+      operationId: "getAllPersons"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Person'
+  /person/{personId}:
+    get:
+      tags:
+      - "person"
+      summary: "Get person by id"
+      description: ""
+      operationId: "getPersonById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "personId"
+        in: "path"
+        description: "Id of person to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Person not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    delete:
+      tags:
+      - "person"
+      summary: "Deletes a person by id"
+      description: ""
+      operationId: "deletePersonById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "personId"
+        in: "path"
+        description: "Id of person to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Person not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+              
+# Person Get
+  /person/findByPhone/{phone}:
+    get:
+      tags:
+      - "person get"
+      summary: "Get a person by phone number"
+      description: ""
+      operationId: "getPersonByPhone"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "phone"
+        in: "path"
+        description: "Phone of person to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid phone supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Person not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /person/findByHobby/{hobby}:
+    get:
+      tags:
+      - "person get"
+      summary: "Get all persons by hobbies"
+      description: ""
+      operationId: "getAllPersonsByHobby"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "hobby"
+        in: "path"
+        description: "Hobby of persons to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid hobby supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /person/findByCity:
+    get:
+      tags:
+      - "person get"
+      summary: "Get all persons by hobby"
+      description: ""
+      operationId: "getAllPersonsByCity"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Hobby of persons to return"
+        required: true
+        schema:
+            $ref: '#/definitions/CityInfo'
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid hobby supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /person/countByHobby:
+    get:
+      tags:
+      - "person get"
+      summary: "Get count of persons by hobby"
+      description: ""
+      operationId: "getCountOfPersonsByHobby"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Hobby of persons to count"
+        required: true
+        schema:
+            $ref: '#/definitions/Hobby'
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid hobby supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+              
+# Company
+  /company:
+    post:
+      tags:
+      - "company"
+      summary: "Add a new company"
+      description: ""
+      operationId: "addCompany"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Company object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Company"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Company'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    put:
+      tags:
+      - "company"
+      summary: "Edit a company"
+      description: ""
+      operationId: "editCompany"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Company object that needs to be edited"
+        required: true
+        schema:
+          $ref: "#/definitions/Company"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Company'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Company not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /company/all:
+    get:
+      tags:
+      - "company"
+      summary: "Get all companies"
+      description: ""
+      operationId: "getAllCompanies"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Company'
+  /company/{compId}:
+    get:
+      tags:
+      - "company"
+      summary: "Get company by id"
+      description: ""
+      operationId: "getCompanyById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "compId"
+        in: "path"
+        description: "Id of company to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Company'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Company not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    delete:
+      tags:
+      - "company"
+      summary: "Deletes a company by id"
+      description: ""
+      operationId: "deleteCompanyById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "compId"
+        in: "path"
+        description: "Id of company to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Company not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+              
+# Company Get
+  /company/findByPhone/{phone}:
+      get:
+        tags:
+        - "company get"
+        summary: "Get company by phone"
+        description: ""
+        operationId: "getCompanyByPhone"
+        produces:
+          - "application/json"
+        parameters:
+        - name: "phone"
+          in: "path"
+          description: "Phone of company to return"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Succesful operation"
+            schema:
+                $ref: '#/definitions/Company'
+          400:
+            description: "Invalid Id supplied"
+            schema:
+              items:
+                $ref: '#/definitions/ApiResponse'
+          404:
+            description: "Company not found"
+            schema:
+              items:
+                $ref: '#/definitions/ApiResponse'
+  /company/findByCVR/{cvr}:
+      get:
+        tags:
+        - "company get"
+        summary: "Get company by cvr"
+        description: ""
+        operationId: "getCompanyByCVR"
+        produces:
+          - "application/json"
+        parameters:
+        - name: "cvr"
+          in: "path"
+          description: "CVR of company to return"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Succesful operation"
+            schema:
+                $ref: '#/definitions/Company'
+          400:
+            description: "Invalid Id supplied"
+            schema:
+              items:
+                $ref: '#/definitions/ApiResponse'
+          404:
+            description: "Company not found"
+            schema:
+              items:
+                $ref: '#/definitions/ApiResponse'
+# Address
+  /address:
+    post:
+      tags:
+      - "address"
+      summary: "Add a new address"
+      description: ""
+      operationId: "addAddress"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Address object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Address"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Address'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    put:
+      tags:
+      - "address"
+      summary: "Edit an address"
+      description: ""
+      operationId: "editAddress"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Address object that needs to be edited"
+        required: true
+        schema:
+          $ref: "#/definitions/Address"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Address'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Address not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /address/all:
+    get:
+      tags:
+      - "address"
+      summary: "Get all addresses"
+      description: ""
+      operationId: "getAllAddresses"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Address'
+  /address/{addressId}:
+    get:
+      tags:
+      - "address"
+      summary: "Get address by id"
+      description: ""
+      operationId: "getAddressById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "addressId"
+        in: "path"
+        description: "Id of address to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Address'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Address not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    delete:
+      tags:
+      - "address"
+      summary: "Deletes a address by id"
+      description: ""
+      operationId: "deleteAddressById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "addressId"
+        in: "path"
+        description: "Id of address to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Address not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+              
+# Hobby
+  /hobby:
+    post:
+      tags:
+      - "hobby"
+      summary: "Add a new hobby"
+      description: ""
+      operationId: "addHobby"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Hobby object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Hobby"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Hobby'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    put:
+      tags:
+      - "hobby"
+      summary: "Edit an hobby"
+      description: ""
+      operationId: "editHobby"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Hobby object that needs to be edited"
+        required: true
+        schema:
+          $ref: "#/definitions/Hobby"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Hobby'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Hobby not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /hobby/all:
+    get:
+      tags:
+      - "hobby"
+      summary: "Get all hobbies"
+      description: ""
+      operationId: "getAllHobbies"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Hobby'
+  /hobby/{hobbyId}:
+    get:
+      tags:
+      - "hobby"
+      summary: "Get a hobby by id"
+      description: ""
+      operationId: "getHobbyById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "hobbyId"
+        in: "path"
+        description: "Id of hobby to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Hobby'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Hobby not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    delete:
+      tags:
+      - "hobby"
+      summary: "Deletes an hobby by id"
+      description: ""
+      operationId: "deleteHobbyById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "hobbyId"
+        in: "path"
+        description: "Id of hobby to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Hobby not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+              
+# Phone
+  /phone:
+    post:
+      tags:
+      - "phone"
+      summary: "Add a new phone"
+      description: ""
+      operationId: "addPhone"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Phone object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Phone"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Phone'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    put:
+      tags:
+      - "phone"
+      summary: "Edit an phone"
+      description: ""
+      operationId: "editPhone"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Phone object that needs to be edited"
+        required: true
+        schema:
+          $ref: "#/definitions/Phone"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/Phone'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Phone not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        405:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /phone/all:
+    get:
+      tags:
+      - "phone"
+      summary: "Get all phones"
+      description: ""
+      operationId: "getAllPhones"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Phone'
+  /phone/{phoneId}:
+    get:
+      tags:
+      - "phone"
+      summary: "Get a phone by id"
+      description: ""
+      operationId: "getPhoneById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "phoneId"
+        in: "path"
+        description: "Id of phone to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+              $ref: '#/definitions/Phone'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Phone not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    delete:
+      tags:
+      - "phone"
+      summary: "Deletes an phone by id"
+      description: ""
+      operationId: "deletePhoneById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "phoneId"
+        in: "path"
+        description: "Id of phone to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid Id supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        404:
+          description: "Phone not found"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+    
+
+definitions:
+  Person:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      hobbies:
+        type: "array"
+        items:
+          $ref: '#/definitions/Hobby'
+      infoEntity:
+          $ref: '#/definitions/InfoEntity'
+  Address:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      street:
+        type: "string"
+      city:
+        $ref: '#/definitions/CityInfo'
+  CityInfo:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      zip:
+        type: "string"
+      city:
+        type: "string"
+  Hobby:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+  Phone:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      number:
+        type: "string"
+      description:
+        type: "string"
+  InfoEntity:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+      phones:
+        type: "array"
+        items:
+          $ref: '#/definitions/Phone'
+      address:
+          $ref: '#/definitions/Address'
+  Company:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      cvr:
+        type: "string"
+      employeeCount:
+        type: "integer"
+        format: "int32"
+      makertValue:
+        type: "integer"
+        format: "int64"
+      infoEntity:
+        items:
+          $ref: '#/definitions/InfoEntity'
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"

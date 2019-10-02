@@ -1,9 +1,9 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "CA-2 API documentation",
     "version" : "1.1",
-    "title" : "Course Assignment 2"
+    "title" : "Course Assignment 2",
+    "description" : "CA-2 API documentation"
   },
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/Out-of-Memory/CourseAssignmentTwo/1",
@@ -29,11 +29,19 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Person"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -56,19 +64,35 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Person"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Person not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -80,7 +104,6 @@
         "description" : "",
         "operationId" : "getAllPersons",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
@@ -118,11 +141,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Person not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -143,15 +174,27 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Person not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -179,11 +222,19 @@
           },
           "400" : {
             "description" : "Invalid phone supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Person not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -211,7 +262,11 @@
           },
           "400" : {
             "description" : "Invalid hobby supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -224,8 +279,8 @@
         "operationId" : "getAllPersonsByCity",
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
           "name" : "body",
+          "in" : "body",
           "description" : "Hobby of persons to return",
           "required" : true,
           "schema" : {
@@ -244,7 +299,11 @@
           },
           "400" : {
             "description" : "Invalid hobby supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -257,8 +316,8 @@
         "operationId" : "getCountOfPersonsByHobby",
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
           "name" : "body",
+          "in" : "body",
           "description" : "Hobby of persons to count",
           "required" : true,
           "schema" : {
@@ -268,11 +327,19 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid hobby supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -297,11 +364,19 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Company"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -324,19 +399,35 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Company"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Company not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -348,7 +439,6 @@
         "description" : "",
         "operationId" : "getAllCompanies",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
@@ -386,11 +476,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Company not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -411,15 +509,27 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Company not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -447,11 +557,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Company not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -479,11 +597,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Company not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -508,11 +634,19 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Address"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -535,19 +669,35 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Address"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Address not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -559,7 +709,6 @@
         "description" : "",
         "operationId" : "getAllAddresses",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
@@ -597,11 +746,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Address not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -622,15 +779,27 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Address not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -655,11 +824,19 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Hobby"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -682,19 +859,35 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Hobby"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Hobby not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -706,7 +899,6 @@
         "description" : "",
         "operationId" : "getAllHobbies",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
@@ -744,11 +936,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Hobby not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -769,15 +969,27 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Hobby not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -802,11 +1014,19 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Phone"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -829,19 +1049,35 @@
         "responses" : {
           "200" : {
             "description" : "Successful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Phone"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Phone not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "405" : {
             "description" : "Invalid input",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -853,7 +1089,6 @@
         "description" : "",
         "operationId" : "getAllPhones",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
@@ -891,11 +1126,19 @@
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Phone not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       },
@@ -916,15 +1159,27 @@
         "responses" : {
           "200" : {
             "description" : "Succesful operation",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "400" : {
             "description" : "Invalid Id supplied",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           },
           "404" : {
             "description" : "Phone not found",
-            "schema" : { }
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            }
           }
         }
       }
@@ -950,7 +1205,11 @@
             "$ref" : "#/definitions/Hobby"
           }
         },
-        "infoEntity" : { }
+        "infoEntity" : {
+          "items" : {
+            "$ref" : "#/definitions/InfoEntity"
+          }
+        }
       }
     },
     "Address" : {
@@ -1058,7 +1317,11 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "infoEntity" : { }
+        "infoEntity" : {
+          "items" : {
+            "$ref" : "#/definitions/InfoEntity"
+          }
+        }
       }
     },
     "ApiResponse" : {

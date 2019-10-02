@@ -21,7 +21,7 @@ public class RenameMeResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
-                "jdbc:mysql://localhost:3307/startcode",
+                "jdbc:mysql://localhost:3307/ca2",
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);

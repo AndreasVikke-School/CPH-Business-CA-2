@@ -10,10 +10,10 @@
     <h1>Links:</h1>
     <ul>
         <li>
-            <a href="https://andreasvikke.dk/CA2-Backend/apidocumentation/">API Documentation</a>
+            <a href="apidocumentation/">API Documentation</a>
         </li>
         <li>
-            <a href="https://andreasvikke.dk/CA2-Backend/openapi/">OpenAPI</a>
+            <a href="openapi/">OpenAPI</a>
         </li>
     </ul>
 </div>

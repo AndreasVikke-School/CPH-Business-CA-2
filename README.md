@@ -2,4 +2,4 @@
 
 # Deployment Links
  - [API Documentation](https://andreasvikke.dk/CA2-Backend/apidocumentation/)
- - [OpenAI](https://andreasvikke.dk/CA2-Backend/openapi/)
+ - [OpenAPI](https://andreasvikke.dk/CA2-Backend/openapi/)

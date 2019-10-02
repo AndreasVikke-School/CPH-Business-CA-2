@@ -188,36 +188,11 @@ paths:
           schema:
             items:
               $ref: '#/definitions/ApiResponse'
-  /person/findByHobby/{hobby}:
-    get:
-      tags:
-      - "person get"
-      summary: "Get all persons by hobbies"
-      description: ""
-      operationId: "getAllPersonsByHobby"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "hobby"
-        in: "path"
-        description: "Hobby of persons to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Succesful operation"
-          schema:
-              $ref: '#/definitions/Person'
-        400:
-          description: "Invalid hobby supplied"
-          schema:
-            items:
-              $ref: '#/definitions/ApiResponse'
   /person/findByCity:
     get:
       tags:
       - "person get"
-      summary: "Get all persons by hobby"
+      summary: "Get all persons by city"
       description: ""
       operationId: "getAllPersonsByCity"
       produces:
@@ -236,33 +211,6 @@ paths:
             type: "array"
             items:
               $ref: '#/definitions/Person'
-        400:
-          description: "Invalid hobby supplied"
-          schema:
-            items:
-              $ref: '#/definitions/ApiResponse'
-  /person/countByHobby:
-    get:
-      tags:
-      - "person get"
-      summary: "Get count of persons by hobby"
-      description: ""
-      operationId: "getCountOfPersonsByHobby"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "body"
-        in: "body"
-        description: "Hobby of persons to count"
-        required: true
-        schema:
-            $ref: '#/definitions/Hobby'
-      responses:
-        200:
-          description: "Succesful operation"
-          schema:
-            items:
-              $ref: '#/definitions/ApiResponse'
         400:
           description: "Invalid hobby supplied"
           schema:
@@ -770,6 +718,59 @@ paths:
           schema:
             items:
               $ref: '#/definitions/ApiResponse'
+  /hobby/persons/{hobbyId}:
+    get:
+      tags:
+      - "hobby get"
+      summary: "Get all persons by hobby"
+      description: ""
+      operationId: "getAllPersonsByHobby"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "hobbyId"
+        in: "path"
+        description: "Hobby of persons to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Person'
+        400:
+          description: "Invalid hobby supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+  /hobby/personCount/{hobbyId}:
+    get:
+      tags:
+      - "hobby get"
+      summary: "Get count of persons by hobby"
+      description: ""
+      operationId: "getCountOfPersonsByHobby"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "hobbyId"
+        in: "path"
+        description: "Hobby of persons to count"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Succesful operation"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
+        400:
+          description: "Invalid hobby supplied"
+          schema:
+            items:
+              $ref: '#/definitions/ApiResponse'
               
 # Phone
   /phone:
@@ -935,7 +936,7 @@ definitions:
         items:
           $ref: '#/definitions/Hobby'
       infoEntity:
-          $ref: '#/definitions/InfoEntity'
+        $ref: '#/definitions/InfoEntity'
   Address:
     type: "object"
     properties:
@@ -966,6 +967,10 @@ definitions:
         type: "string"
       description:
         type: "string"
+      persons:
+        type: "array"
+        items:
+          $ref: '#/definitions/Person'
   Phone:
     type: "object"
     properties:
@@ -1009,7 +1014,6 @@ definitions:
         type: "integer"
         format: "int64"
       infoEntity:
-        items:
           $ref: '#/definitions/InfoEntity'
   ApiResponse:
     type: "object"

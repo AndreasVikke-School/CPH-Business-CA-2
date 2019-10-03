@@ -30,7 +30,7 @@ public class PersonFacade implements IFacade<Person> {
 
     @Override
     public Person getById(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().find(Person.class, id);
     }
 
     @Override

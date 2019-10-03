@@ -2,6 +2,7 @@ package dto;
 
 import entities.InfoEntity;
 import entities.Phone;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +10,10 @@ import java.util.List;
  *
  * @author andreas
  */
+@Schema(name = "InfoEntity")
 public class InfoEntityDTO {
     private long id;
+    @Schema(required = true, example = "example@example.com")
     private String email;
     private List<PhoneDTO> phones;
     private AddressDTO address;

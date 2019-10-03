@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
@@ -12,7 +13,10 @@ import javax.persistence.NamedQuery;
  * @author Martin Frederiksen
  */
 @Entity
-@NamedQuery(name = "CityInfo.deleteAllRows", query = "DELETE from CityInfo")
+@NamedQueries({
+    @NamedQuery(name = "CityInfo.deleteAllRows", query = "DELETE from CityInfo"),
+    @NamedQuery(name = "CityInfo.getByZipCity", query = "SELECT cityInfo FROM CityInfo cityInfo WHERE cityInfo.zip = :zip AND cityInfo.city = :city")
+})
 public class CityInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +33,7 @@ public class CityInfo implements Serializable {
         this.zip = zip;
         this.city = city;
     }
-    
+
     public Long getId() {
         return id;
     }

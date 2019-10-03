@@ -42,11 +42,4 @@ public class RenameMeResource {
         //System.out.println("--------------->"+count);
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
-
-    @Path("test")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public PhoneDTO getRenameMe() {
-        return new PhoneDTO(1, "28438851", "Mobile");
-    }
 }

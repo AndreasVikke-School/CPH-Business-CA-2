@@ -3,6 +3,7 @@ package dto;
 import entities.Hobby;
 import entities.InfoEntity;
 import entities.Person;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,11 @@ import java.util.List;
  *
  * @author andreas
  */
+@Schema(name = "Person")
 class PersonDTO extends InfoEntityDTO {
+    @Schema(required = true, example = "Alan")
     private String firsName;
+    @Schema(required = true, example = "Petersen")
     private String lastName;
     private List<HobbyDTO> hobbies;
 

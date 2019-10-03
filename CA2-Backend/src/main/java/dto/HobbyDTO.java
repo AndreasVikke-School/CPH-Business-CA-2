@@ -2,6 +2,7 @@ package dto;
 
 import entities.Hobby;
 import entities.Person;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,12 @@ import java.util.List;
  *
  * @author andreas
  */
+@Schema(name = "Hobby")
 public class HobbyDTO {
     private long id;
+    @Schema(required = true, example = "Fishing")
     private String name;
+    @Schema(required = true, example = "Fishing in a lake")
     private String description;
     private List<PersonDTO> persons;
 

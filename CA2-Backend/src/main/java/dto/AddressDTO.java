@@ -1,14 +1,18 @@
 package dto;
 
 import entities.Address;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
  * @author andreas
  */
+@Schema(name = "Address")
 public class AddressDTO {
     private long id;
+    @Schema(required = true, example = "Streetname")
     private String street;
+    @Schema(required = true)
     private CityInfoDTO cityInfo;
 
     public AddressDTO(long id, String street, CityInfoDTO cityInfo) {

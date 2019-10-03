@@ -1,14 +1,18 @@
 package dto;
 
 import entities.Phone;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
  * @author andreas
  */
+@Schema(name = "Phone")
 public class PhoneDTO {
     private long id;
+    @Schema(required = true, example = "12345678")
     private String number;
+    @Schema(required = true, example = "Mobile")
     private String description;
 
     public PhoneDTO(long id, String number, String description) {

@@ -2,16 +2,23 @@ package dto;
 
 import entities.Company;
 import entities.InfoEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
  * @author andreas
  */
+@Schema(name = "Company")
 public class CompanyDTO extends InfoEntityDTO {
+    @Schema(required = true, example = "CompanyName A/S")
     private String name;
+    @Schema(required = true, example = "Shipping Containers")
     private String description;
+    @Schema(required = true, example = "12345678")
     private String cvr;
+    @Schema(required = true, example = "100")
     private int employeeCount;
+    @Schema(required = true, example = "5000000")
     private long marketValue;
 
     public CompanyDTO(String name, String description, String cvr, int employeeCount, long marketValue, InfoEntity infoEntity) {

@@ -15,12 +15,13 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 //Uncomment the line below, to temporarily disable this test
-//@Disabled
+@Disabled
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -101,7 +102,7 @@ public class PersonFacadeTest {
         Long expected = 0L;
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             Phone p1 = new Phone("22883099","Phone description");
             em.persist(p1);
             Phone p2 = new Phone("22759304","Phone description 2 - The Redemption");
@@ -146,7 +147,7 @@ public class PersonFacadeTest {
             em.getTransaction().begin();
             expected += em.createNamedQuery("Person.findAll").getResultList().size();
             
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             Phone p1 = new Phone("22883099","Phone description");
             em.persist(p1);
             Phone p2 = new Phone("22759304","Phone description 2 - The Redemption");

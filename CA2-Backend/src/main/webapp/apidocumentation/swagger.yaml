@@ -200,7 +200,7 @@ paths:
       parameters:
       - name: "body"
         in: "body"
-        description: "Hobby of persons to return"
+        description: "City of persons to return"
         required: true
         schema:
             $ref: '#/definitions/CityInfo'
@@ -212,7 +212,7 @@ paths:
             items:
               $ref: '#/definitions/Person'
         400:
-          description: "Invalid hobby supplied"
+          description: "Invalid id supplied"
           schema:
             items:
               $ref: '#/definitions/ApiResponse'
@@ -732,7 +732,8 @@ paths:
         in: "path"
         description: "Hobby of persons to return"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "Succesful operation"
@@ -741,7 +742,7 @@ paths:
             items:
               $ref: '#/definitions/Person'
         400:
-          description: "Invalid hobby supplied"
+          description: "Invalid id supplied"
           schema:
             items:
               $ref: '#/definitions/ApiResponse'
@@ -759,7 +760,8 @@ paths:
         in: "path"
         description: "Hobby of persons to count"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "Succesful operation"
@@ -767,7 +769,7 @@ paths:
             items:
               $ref: '#/definitions/ApiResponse'
         400:
-          description: "Invalid hobby supplied"
+          description: "Invalid id supplied"
           schema:
             items:
               $ref: '#/definitions/ApiResponse'

@@ -1,6 +1,6 @@
 package rest;
 
-import javax.enterprise.context.Dependent;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -26,19 +26,19 @@ public interface iResource<O> {
     @GET
     @Path("/all")
     @Consumes(MediaType.APPLICATION_JSON)
-    O getAll();
+    List<O> getAll();
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    O add(String obj);
+    O add(O obj);
 
     @PUT
     @Path("/edit")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    O edit(String obj);
+    O edit(O obj);
 
     @DELETE
     @Path("/delete/{id}")

@@ -22,7 +22,7 @@ import utils.EMF_Creator.Strategy;
  */
 public class test {
     public static void main(String[] args) {
-        CityInfo ci1 = new CityInfo("2800", "Skodsborg");
+        /*CityInfo ci1 = new CityInfo("2800", "Skodsborg");
         
         Address a1 = new Address("Hejvejtest1", ci1);
         Address a2 = new Address("Hejvejtest2", ci1);
@@ -56,6 +56,24 @@ public class test {
         em.persist(p);
         em.persist(c);
         em.getTransaction().commit();
+        */
         
+        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(DbSelector.DEV, Strategy.DROP_AND_CREATE);
+        PhoneFacade pf = PhoneFacade.getPhoneFacade(emf);
+        
+        Phone ph1 = new Phone("12345678", "Moms phone");
+        Phone ph2 = new Phone("12345679", "Dads phone");
+        Phone ph3 = new Phone("Hemmeligt", "Vikkes snedker");
+        
+        pf.add(ph1);
+        pf.add(ph2);
+        pf.add(ph3);
+        pf.delete(ph3.getId());
+        //pf.delete(100L);
+        ph2.setNumber("11223344");
+        pf.edit(ph2);
+        
+        System.out.println(pf.getById(1).getDescription());
+        System.out.println(pf.getAll());
     }
 }

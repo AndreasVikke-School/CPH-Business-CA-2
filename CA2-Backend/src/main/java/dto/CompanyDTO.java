@@ -1,32 +1,35 @@
-package entities;
+package dto;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
+import entities.Company;
+import entities.InfoEntity;
 
 /**
  *
- * @author Martin Frederiksen
+ * @author andreas
  */
-@Entity
-@NamedQuery(name = "Company.deleteAllRows", query = "DELETE from Company")
-public class Company extends InfoEntity implements Serializable {
+public class CompanyDTO extends InfoEntityDTO {
     private String name;
     private String description;
     private String cvr;
     private int employeeCount;
     private long marketValue;
 
-    public Company() {
-    }
-
-    public Company(String name, String description, String cvr, int employeeCount, long marketValue, InfoEntity infoEntity) {
-        super(infoEntity.getEmail(), infoEntity.getPhones(), infoEntity.getAddress());
+    public CompanyDTO(String name, String description, String cvr, int employeeCount, long marketValue, InfoEntity infoEntity) {
+        super(infoEntity);
         this.name = name;
         this.description = description;
         this.cvr = cvr;
         this.employeeCount = employeeCount;
         this.marketValue = marketValue;
+    }
+    
+    public CompanyDTO(Company company) {
+        super(company);
+        this.name = company.getName();
+        this.description = company.getDescription();
+        this.cvr = company.getCvr();
+        this.employeeCount = company.getEmployeeCount();
+        this.marketValue = company.getMarketValue();
     }
 
     public String getName() {

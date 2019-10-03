@@ -59,7 +59,7 @@ public class test {
         em.getTransaction().commit();
         */
         
-        /*
+        
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(DbSelector.DEV, Strategy.DROP_AND_CREATE);
         PhoneFacade pf = PhoneFacade.getPhoneFacade(emf);
         AddressFacade af = AddressFacade.getAddressFacade(emf);
@@ -85,6 +85,6 @@ public class test {
         System.out.println(c1.getId());
         
         af.add(a1);
-        */
+        
     }
 }

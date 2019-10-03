@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import managers.FacadeManager;
 
 /**
  *
@@ -46,15 +47,11 @@ public class AddressFacade implements IFacade<Address> {
     @Override
     public Address add(Address address) {
         EntityManager em = getEntityManager();
-        CityInfo ci;
         try {
             em.getTransaction().begin();
-            try {
-                ci = em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()).getSingleResult();
-            } catch (NoResultException ex) {
+            CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
+            if (ci == null) {
                 ci = new CityInfo(address.getCity().getZip(), address.getCity().getCity());
-            }
-            if (ci.getId() == null) {
                 em.persist(ci);
             }
             address.setCity(ci);

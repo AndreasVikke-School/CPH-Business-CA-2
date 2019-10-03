@@ -30,12 +30,12 @@ public class CompanyFacade implements IFacade<Company> {
 
     @Override
     public Company getById(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().find(Company.class, id);
     }
 
     @Override
     public List<Company> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT company FROM Company company").getResultList();
     }
 
     @Override

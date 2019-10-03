@@ -5,18 +5,20 @@ import entities.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import managers.FacadeManager;
 
 /**
  *
  * @author Joe
  */
 public class HobbyFacade implements IFacade<Hobby> {
+
     private static HobbyFacade instance;
     private static EntityManagerFactory emf;
 
     public HobbyFacade() {
     }
-    
+
     public static HobbyFacade getHobbyFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -24,41 +26,72 @@ public class HobbyFacade implements IFacade<Hobby> {
         }
         return instance;
     }
-    
-        private EntityManager getEntityManager() {
+
+    private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
     @Override
     public Hobby getById(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().find(Hobby.class, id);
     }
 
     @Override
     public List<Hobby> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT hobby FROM Hobby hobby").getResultList();
     }
 
     @Override
     public Hobby add(Hobby hobby) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = getEntityManager();
+        Hobby h = FacadeManager.getSingleResult(em.createQuery("SELECT hobby FROM Hobby hobby WHERE hobby.name = :name AND hobby.description = :description", Hobby.class).setParameter("name", hobby.getName()).setParameter("description", hobby.getDescription()));
+        if (h == null) {
+            try {
+                em.getTransaction().begin();
+                em.persist(h);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        } else {
+            hobby = h;
+        }
+        return hobby;
     }
 
     @Override
     public Hobby edit(Hobby hobby) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(hobby);
+            em.getTransaction().commit();
+            return hobby;
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Hobby delete(long id) {
+        EntityManager em = getEntityManager();
+        Hobby h = em.find(Hobby.class, id);
+        try {
+            em.getTransaction().begin();
+            em.persist(h);
+            em.getTransaction().commit();
+            return h;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Person> getPersonsByHobby(long hobbyId) {
+        //return getEntityManager().createQuery("SELECT person FROM Person person WHERE person.hobbies")
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public List<Person> getPersonsByHobby() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public long getPersonCountByHobby() {
+
+    public long getPersonCountByHobby(long hobbyId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

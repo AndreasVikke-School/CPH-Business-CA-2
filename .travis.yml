@@ -22,6 +22,11 @@ script:
 services:
    - mysql
 
+yml language: 
+node_js node_js: 
+- "0.12" after_success: 
+  - surge --project ./CA2-Frontend/build --domain ca2-frontend.surge.sh 
+
 before_script:
 
 

@@ -21,7 +21,7 @@ script:
   - cd ../CA2-Frontend
   - npm install -g surge
   - npm run build
-  - surge --project ./CA2-Frontend/build --domain ca2-frontend.surge.sh
+  - surge --project ./build --domain ca2-frontend.surge.sh
 
 services:
    - mysql  

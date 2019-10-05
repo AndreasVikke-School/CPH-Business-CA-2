@@ -19,9 +19,10 @@ script:
   - mvn test
   - mvn -Dremote.user=$REMOTE_USER -Dremote.password=$REMOTE_PW tomcat7:deploy
   - cd ../CA2-Frontend
-  - npm install -g surge
+  - npm install
   - npm run build
-  - surge --project ./build --domain ca2-frontend.surge.sh
+  - npm install -g surge
+  - surge --project ./build --domain ca2-frontend.andreasvikke.dk
 
 services:
    - mysql  

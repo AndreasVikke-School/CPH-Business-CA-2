@@ -22,7 +22,7 @@ script:
   - npm install
   - npm run build
   - npm install -g surge
-  - surge --project ./build --domain https://ca2-frontend.andreasvikke.dk
+  - surge --project ./build --domain ca2-frontend.andreasvikke.dk
 
 services:
    - mysql  

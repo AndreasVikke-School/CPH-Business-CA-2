@@ -18,6 +18,7 @@ script:
   - cd CA2-Backend
   - mvn test
   - mvn -Dremote.user=$REMOTE_USER -Dremote.password=$REMOTE_PW tomcat7:deploy
+  - cd ..
   - npm install -g surge
   - surge --project ./CA2-Frontend/build --domain ca2-frontend.surge.sh
 

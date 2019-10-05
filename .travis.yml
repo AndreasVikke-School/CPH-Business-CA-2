@@ -18,13 +18,14 @@ script:
   - cd CA2-Backend
   - mvn test
   - mvn -Dremote.user=$REMOTE_USER -Dremote.password=$REMOTE_PW tomcat7:deploy
-  - surge --project ./CA2-Frontend/build --domain ca2-frontend.surge.sh 
+  - cd CA2-Frontend
+  - npm install -g surge
+  - surge --project ./build --domain ca2-frontend.surge.sh
 
 services:
    - mysql  
 
 before_script:
-
 
 # TODO Add variable to make it simple to be reusable for all semester projects
 #- export DEBIAN_FRONTEND="noninteractive";

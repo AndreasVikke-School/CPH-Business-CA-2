@@ -1,5 +1,6 @@
 package rest;
 
+
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(errorhandling.GenericExceptionMapper.class);
+        resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
+        resources.add(rest.PhoneResource.class);
         resources.add(rest.RenameMeResource.class);
     }
 

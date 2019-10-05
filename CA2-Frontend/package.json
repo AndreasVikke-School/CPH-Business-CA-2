@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "core-util-is": "^1.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -22,6 +23,7 @@
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
     "style-loader": "^0.23.0",
+    "surge": "^0.21.3",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^3.1.11"
   }

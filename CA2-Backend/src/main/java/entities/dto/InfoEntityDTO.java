@@ -1,4 +1,4 @@
-package dto;
+package entities.dto;
 
 import entities.InfoEntity;
 import entities.Phone;

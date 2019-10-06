@@ -2,7 +2,6 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.PhoneDTO;
 import entities.RenameMe;
 import utils.EMF_Creator;
 import facades.FacadeExample;

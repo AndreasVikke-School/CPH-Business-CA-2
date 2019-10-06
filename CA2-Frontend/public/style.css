@@ -10,3 +10,11 @@ body {
      margin-right: auto;
   }
   
+  
+.col-sm {
+   margin: 10px 0px !important; 
+ }
+
+ .vertical-center {
+    margin: 0px 0px !important;
+ }

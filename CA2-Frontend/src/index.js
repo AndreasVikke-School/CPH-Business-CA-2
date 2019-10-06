@@ -1,9 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.css'
 
 window.onload = () => {
-    document.getElementById("container").append(createTable([{"firstname" : "Andreas", "lastname" : "Vikke"},
+    document.getElementById("output").append(createTable([{"firstname" : "Andreas", "lastname" : "Vikke"},
     {"firstname" : "Emil", "lastname" : "Svensmark"}]));
 }
+
+var btn = document.getElementById("hobbyBtn");
+btn.addEventListener("click", buttonEventFetch);
+
+/*function buttonEventFetch() {
+    var id = document.getElementById("jokeInput").value;
+    getFetchDataId(id);
+}*/
 
 
 function createTable(array) {

@@ -155,7 +155,7 @@ public class CompanyFacadeTestFix {
     
     @Disabled
     @Test
-    public void testGetByPhone() {
+    public void testGetByPhone() throws Throwable {
         String number = companies.get(0).getPhones().get(0).getNumber();
         Long expected = companies.get(0).getId();
         assertEquals(expected, facade.getByPhone(number).getId());

@@ -35,6 +35,9 @@ public class InfoEntityDTO {
             this.phones.add(new PhoneDTO(p));
     }
 
+    public InfoEntityDTO() {
+    }
+
     public long getId() {
         return id;
     }

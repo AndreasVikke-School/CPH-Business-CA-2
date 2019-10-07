@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Schema(name = "CityInfo")
 public class CityInfoDTO {
+
     private long id;
     @Schema(required = true, example = "Lyngby")
     private String city;
@@ -20,11 +21,14 @@ public class CityInfoDTO {
         this.city = city;
         this.zip = zip;
     }
-    
-     public CityInfoDTO(CityInfo cityInfo) {
+
+    public CityInfoDTO(CityInfo cityInfo) {
         this.id = cityInfo.getId();
         this.city = cityInfo.getCity();
         this.zip = cityInfo.getZip();
+    }
+
+    public CityInfoDTO() {
     }
 
     public long getId() {

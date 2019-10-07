@@ -2,11 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import entities.dto.PhoneDTO;
-import entities.Phone;
+import entities.Address;
+import entities.CityInfo;
+import entities.dto.AddressDTO;
 import errorhandling.dto.ExceptionDTO;
-import utils.EMF_Creator;
-import facades.PhoneFacade;
+import facades.AddressFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,64 +26,69 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import utils.EMF_Creator;
 
-@Path("phone")
-public class PhoneResource {
-    
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
+/**
+ *
+ * @author Andreas Vikke
+ */
+@Path("address")
+public class AddressResource {
+     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
             "pu",
             "jdbc:mysql://localhost:3307/ca2",
             "dev",
             "ax2",
             EMF_Creator.Strategy.CREATE);
-    private static final PhoneFacade FACADE = PhoneFacade.getPhoneFacade(EMF);
+    private static final AddressFacade FACADE = AddressFacade.getAddressFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all phones",
-            tags = {"phone"},
+    @Operation(summary = "Get all adrress",
+            tags = {"address"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = Address.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "404", description = "Phone not found")}
+                        responseCode = "404", description = "Address not found")}
     )
-    public PhoneDTO getById(@PathParam("id") long id) {
+    public AddressDTO getById(@PathParam("id") long id) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
 
-        Phone phone = FACADE.getById(id);
-        if (phone == null) {
-            throw new WebApplicationException("Phone not found", 404);
+        Address address = FACADE.getById(id);
+        if (address == null) {
+            throw new WebApplicationException("Address not found", 404);
         }
 
-        return new PhoneDTO(phone);
+        return new AddressDTO(address);
     }
-
+    
+    
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all phones",
-            tags = {"phone"},
+    @Operation(summary = "Get all addresses",
+            tags = {"address"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = Phone.class))),
+                        array = @ArraySchema(schema = @Schema(implementation = Address.class))),
                         responseCode = "200", description = "Succesful operation")}
     )
-    public List<PhoneDTO> getAll() {
-        List<PhoneDTO> dto = new ArrayList();
-        for (Phone p : FACADE.getAll()) {
-            dto.add(new PhoneDTO(p));
+    public List<AddressDTO> getAll() {
+        List<AddressDTO> dto = new ArrayList();
+        for (Address a : FACADE.getAll()) {
+            dto.add(new AddressDTO(a));
         }
         return dto;
     }
@@ -92,26 +97,26 @@ public class PhoneResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Add a new phone",
-            tags = {"phone"},
+    @Operation(summary = "Add a new address",
+            tags = {"address"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = Address.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "400", description = "Invalid Id supplied")}
     )
-    public PhoneDTO add(PhoneDTO phoneDTO) throws WebApplicationException {
-        if (phoneDTO == null
-                || phoneDTO.getNumber() == null || phoneDTO.getDescription() == null
-                || phoneDTO.getNumber().isEmpty() || phoneDTO.getNumber().isEmpty()) {
+    public AddressDTO add(AddressDTO addressDTO) throws WebApplicationException {
+        if (addressDTO == null
+                || addressDTO.getStreet() == null || addressDTO.getCityInfo()== null
+                || addressDTO.getStreet().isEmpty()) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
-        Phone phone = new Phone(phoneDTO.getNumber(), phoneDTO.getDescription());
-        PhoneDTO dto = new PhoneDTO(FACADE.add(phone));
+        Address address = new Address(addressDTO.getStreet(), new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        AddressDTO dto = new AddressDTO(FACADE.add(address));
         return dto;
     }
 
@@ -119,43 +124,43 @@ public class PhoneResource {
     @Path("/edit/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Edit a phone",
-            tags = {"phone"},
+    @Operation(summary = "Edit a address",
+            tags = {"address"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = Address.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "404", description = "Phone not found")}
+                        responseCode = "404", description = "Address not found")}
     )
-    public PhoneDTO edit(@PathParam("id") long id, PhoneDTO obj) {
-        if (id <= 0 || obj == null
-                || obj.getNumber() == null || obj.getDescription() == null
-                || obj.getNumber().isEmpty() || obj.getNumber().isEmpty()) {
+    public AddressDTO edit(@PathParam("id") long id, AddressDTO addressDTO) {
+        if (id <= 0 || addressDTO == null
+                || addressDTO.getStreet() == null || addressDTO.getCityInfo()== null
+                || addressDTO.getStreet().isEmpty()) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
-        Phone p = FACADE.getById(id);
-        if (p == null) {
-            throw new WebApplicationException("Phone not found", 404);
+        Address a = FACADE.getById(id);
+        if (a == null) {
+            throw new WebApplicationException("Address not found", 404);
         }
 
-        p.setNumber(obj.getNumber());
-        p.setDescription(obj.getDescription());
-        Phone phone = FACADE.edit(p);
-        return new PhoneDTO(phone);
+        a.setStreet(addressDTO.getStreet());
+        a.setCity(new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        Address address = FACADE.edit(a);
+        return new AddressDTO(address);
     }
 
     @DELETE
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Delete a phone",
-            tags = {"phone"},
+    @Operation(summary = "Delete a Address",
+            tags = {"address"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -166,21 +171,21 @@ public class PhoneResource {
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "404", description = "Phone not found")}
+                        responseCode = "404", description = "Address not found")}
     )
     public Response delete(@PathParam("id") long id) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
 
-        Phone phone = FACADE.getById(id);
-        if (phone == null) {
-            throw new WebApplicationException("Phone not found", 404);
+        Address address = FACADE.getById(id);
+        if (address == null) {
+            throw new WebApplicationException("Address not found", 404);
         }
 
-        FACADE.delete(phone.getId());
+        FACADE.delete(address.getId());
         return Response.status(200)
-                .entity("{\"code\" : \"200\", \"message\" : \"Phone with id: " + phone.getId() + " deleted successfully.\"}")
+                .entity("{\"code\" : \"200\", \"message\" : \"Address with id: " + address.getId() + " deleted successfully.\"}")
                 .type(MediaType.APPLICATION_JSON).build();
     }
 }

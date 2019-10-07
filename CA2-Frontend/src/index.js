@@ -14,7 +14,7 @@ window.onload = () => {
     btnCount.addEventListener("click", getHobbyCount);
 
     var zipcodesBtn = document.getElementById("zipcodesBtn");
-    zipcodesBtn.addEventListener("click", testZipcodes);
+    zipcodesBtn.addEventListener("click", getZipcodes);
 }
 
 
@@ -71,19 +71,7 @@ function getFetchData3(hobby) {
         })
 }
 
-//Zipcodes button
-//
-/*function getZipcodes() {
-    fetch("https://dawa.aws.dk/postnumre")
-        .then(res => res.json())
-        .then(data => {
-            //console.log("data", data);
-            document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(data);
-        })
-}*/
-
-function testZipcodes() {
+function getZipcodes() {
     fetch("https://dawa.aws.dk/postnumre")
         .then(res => res.json())
         .then(data => {

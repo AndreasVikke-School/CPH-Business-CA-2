@@ -54,6 +54,10 @@ public class HobbyResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public HobbyDTO getByID(@PathParam("id") long id) {
+        if(id <= 0){
+            throw new WebApplicationException("Invalid id", 400);
+        }
+        
         HobbyDTO dto = new HobbyDTO(FACADE.getById(id));
         if (dto == null) {
             throw new WebApplicationException("Hobby not found", 404);
@@ -66,6 +70,10 @@ public class HobbyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public HobbyDTO addHobby(HobbyDTO DTO) {
+        if(DTO == null || DTO.getName() == null || DTO.getDescription() == null
+                || DTO.getName().isEmpty() || DTO.getDescription().isEmpty()){
+            throw new WebApplicationException("Invalid Input", 400);
+        }
         Hobby hobby = new Hobby(DTO.getName(), DTO.getDescription());
         HobbyDTO dto = new HobbyDTO(FACADE.add(hobby));
         return dto;
@@ -76,10 +84,15 @@ public class HobbyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public HobbyDTO editHobby(@PathParam("id") long id, HobbyDTO DTO) {
+        if(id <= 0){
+            throw new WebApplicationException("Invalid Id", 400);
+        }
+        
         Hobby hobby = FACADE.getById(id);
         if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);
         }
+        
         hobby.setName(DTO.getName());
         hobby.setDescription(DTO.getDescription());
         HobbyDTO dto = new HobbyDTO(FACADE.edit(hobby));
@@ -94,8 +107,8 @@ public class HobbyResource {
         if (id <= 0) {
             throw new WebApplicationException("Invalid ID provided", 400);
         }
+        
         Hobby hobby = FACADE.getById(id);
-
         if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);
         }

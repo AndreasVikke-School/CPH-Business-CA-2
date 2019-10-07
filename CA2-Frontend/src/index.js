@@ -15,10 +15,13 @@ window.onload = () => {
 
     var zipcodesBtn = document.getElementById("zipcodesBtn");
     zipcodesBtn.addEventListener("click", getZipcodes);
+
+    var cmpyListBtn = document.getElementById("cmpyListBtn");
+    cmpyListBtn.addEventListener("click", getCompanyList);
 }
 
 
-//Hobby button
+//Hobby Button
 //Sets .output to a table with all persons with a hobby
 function getHobby() {
     var hobby = document.getElementById("inputGroupSelect01").value;
@@ -35,7 +38,7 @@ function getFetchData1(hobby) {
 }
 
 
-//City button
+//City Button
 //Sets .output to a table with all persons from a city
 function getCity() {
     var city = document.getElementById("inputGroupSelect02").value;
@@ -52,7 +55,7 @@ function getFetchData2(city) {
 }
 
 
-//Hobby Count button
+//Hobby Count Button
 //Sets .output to a number equal to the amount of people from a city
 function getHobbyCount() {
     var hobby = document.getElementById("inputGroupSelect03").value;
@@ -63,14 +66,13 @@ function getFetchData3(hobby) {
     fetch("/CA2/api/hobby/count/" + hobby) //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
-            //console.log("data", data);
             document.getElementById("output").innerHTML = "";
             document.getElementById("output").appendChild(createTable(data)); //needs a better method
         })
 }
 
 
-//Zipcode button
+//Zipcode Button
 //Sets .output to have a div with an overflow class, then sets that div
 //to a table of all zipcodes in denmark. Zipcodes is from API dawa.aws.dk/postnumre.
 function getZipcodes() {
@@ -93,9 +95,7 @@ function getZipcodes() {
 }
 
 
-
-
-//Automatic table generator
+//Automatic Table Generator
 function createTable(array) {
     if (!Array.isArray(array)) {
         array = [array];
@@ -127,9 +127,24 @@ function createTable(array) {
             }
             else
                 tBRow.insertCell(index).innerHTML = obj[key];
-
         });
     });
-
     return table;
+}
+
+
+//Company List Button
+//Sets .output to a table of companies with more than a given amount of employees
+function getCompanyList() {
+    var amount = document.getElementById("companyAmountInput").value; //Har brug for fejlhåndtering
+    getFetchData4(amount);
+}
+
+function getFetchData4(amount) {
+    fetch("/CA2/api") //Need correct API when its made.
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild(createTable(data)); //needs a better method
+        })
 }

@@ -47,25 +47,23 @@ public class CompanyFacade implements IFacade<Company> {
     @Override
     public Company add(Company company) {
         EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Company c = FacadeManager.getSingleResult(em.createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr AND company.name = :name", Company.class).setParameter("cvr", company.getCvr()).setParameter("name", company.getName()));
-            if(c == null) {
-                c = new Company(company.getName(), company.getDescription(), company.getCvr(), company.getEmployeeCount(), company.getMarketValue(), new InfoEntity(company.getEmail(), company.getPhones(), company.getAddress()));
+        Company c = FacadeManager.getSingleResult(em.createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr AND company.name = :name", Company.class).setParameter("cvr", company.getCvr()).setParameter("name", company.getName()));
+        if (c == null) {
+            try {
+                c = company;
+                em.getTransaction().begin();
+                em.persist(c);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            em.persist(c);
-            em.getTransaction().commit();
-            return company;
-        } finally {
-            em.close();
         }
+        return c;
     }
 
     @Override
     public Company edit(Company company) {
         EntityManager em = getEntityManager();
-        Company c = em.find(Company.class, company.getId());
-        company = c;
         try {
             em.getTransaction().begin();
             em.merge(company);
@@ -94,7 +92,6 @@ public class CompanyFacade implements IFacade<Company> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    //Missing exception case!
     public Company getByCVR(String cvr) {
         return getEntityManager().createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr", Company.class).setParameter("cvr", cvr).getSingleResult();
     }

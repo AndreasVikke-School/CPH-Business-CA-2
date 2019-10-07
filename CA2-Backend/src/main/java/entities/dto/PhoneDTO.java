@@ -26,11 +26,9 @@ public class PhoneDTO {
         this.number = phone.getNumber();
         this.description = phone.getDescription();
     }
-
+    
     public PhoneDTO() {
     }
-    
-    
 
     public long getId() {
         return id;

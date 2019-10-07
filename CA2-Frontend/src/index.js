@@ -67,7 +67,7 @@ function getFetchData3(hobby) {
         .then(data => {
             //console.log("data", data);
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(data); //needs a better method
+            document.getElementById("output").append(createTable(data)); //needs a better method
         })
 }
 
@@ -99,7 +99,7 @@ function testZipcodes() {
             }
             console.log(zipcodes);
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(zipcodes);
+            document.getElementById("output").appendChild(createTable(zipcodes));
         })
 }
 

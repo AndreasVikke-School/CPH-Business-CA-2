@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author asgerhs
  */
-public interface iResource<O, T> {
+public interface iResource<O, R> {
 
     @GET
     @Path("/{id}")
@@ -35,14 +35,14 @@ public interface iResource<O, T> {
     O add(O obj);
 
     @PUT
-    @Path("/edit")
+    @Path("/edit/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    O edit(O obj);
+    O edit(@PathParam("id") long id, O obj);
 
     @DELETE
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    T delete(@PathParam("id") long id);
+    R delete(@PathParam("id") long id);
 
 }

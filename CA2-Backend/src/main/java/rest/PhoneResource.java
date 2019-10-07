@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.dto.PhoneDTO;
 import entities.Phone;
-import errorhandling.GenericExceptionMapper;
 import utils.EMF_Creator;
 import facades.PhoneFacade;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,11 +29,6 @@ public class PhoneResource implements iResource<PhoneDTO, Response>{
     private static final PhoneFacade FACADE =  PhoneFacade.getPhoneFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
-    }
 
     @Override
     public PhoneDTO getById(long id) {
@@ -59,24 +54,23 @@ public class PhoneResource implements iResource<PhoneDTO, Response>{
     }
 
     @Override
-    public PhoneDTO edit(PhoneDTO obj) {
-        Phone p = new Phone(obj.getNumber(), obj.getDescription());
+    public PhoneDTO edit(long id, PhoneDTO obj) {
+        Phone p = FACADE.getById(id);
+        p.setNumber(obj.getNumber());
+        p.setDescription(obj.getDescription());
         PhoneDTO dto = new PhoneDTO(FACADE.edit(p));
         return dto;
     }
 
     @Override
     public Response delete(long id) {
-//        try{
-//        PhoneDTO dto = new PhoneDTO(FACADE.getById(id));
-//        FACADE.delete(dto.getId());
-//        return Response.ok().build();
-//        }catch(GenericExceptionMapper ex){
-//            
-//        }
-throw new UnsupportedOperationException("nah");
+        PhoneDTO dto = new PhoneDTO(FACADE.getById(id));
+        FACADE.delete(dto.getId());
+        return Response.ok().build();
+        }
     }
+
 
     
 
-}
+

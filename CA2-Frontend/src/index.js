@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 
 window.onload = () => {
-    document.getElementById("output").append(createTable([{"firstname" : "Andreas", "lastname" : "Vikke"},
-    {"firstname" : "Emil", "lastname" : "Svensmark"}]));
+    document.getElementById("output").append(createTable([{ "firstname": "Andreas", "lastname": "Vikke" },
+    { "firstname": "Emil", "lastname": "Svensmark" }]));
     var btnHobby = document.getElementById("hobbyBtn");
     btnHobby.addEventListener("click", getHobby);
 
@@ -12,6 +12,9 @@ window.onload = () => {
 
     var btnCount = document.getElementById("countBtn");
     btnCount.addEventListener("click", getHobbyCount);
+
+    var zipcodesBtn = document.getElementById("zipcodesBtn");
+    zipcodesBtn.addEventListener("click", testZipcodes);
 }
 
 
@@ -24,11 +27,12 @@ function getHobby() {
 
 function getFetchData1(hobby) {
     fetch("/CA2/api/Hobbies/" + hobby) //Need correct API when its made.
-            .then(res => res.json())
-            .then(data => {
-                //console.log("data", data);
-                document.getElementById("output").innerHTML = createTable(data);
-            })
+        .then(res => res.json())
+        .then(data => {
+            //console.log("data", data);
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild = createTable(data);
+        })
 }
 
 
@@ -36,16 +40,17 @@ function getFetchData1(hobby) {
 //Sets .output to a table with all persons from a city
 function getCity() {
     var city = document.getElementById("inputGroupSelect02").value;
-    getFetchData1(city);
+    getFetchData2(city);
 }
 
 function getFetchData2(city) {
     fetch("/CA2/api/Cities/" + city) //Need correct API when its made.
-            .then(res => res.json())
-            .then(data => {
-                //console.log("data", data);
-                document.getElementById("output").innerHTML = createTable(data);
-            })
+        .then(res => res.json())
+        .then(data => {
+            //console.log("data", data);
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild = createTable(data);
+        })
 }
 
 
@@ -53,17 +58,51 @@ function getFetchData2(city) {
 //Sets .output to a number equal to the amount of people from a city
 function getHobbyCount() {
     var hobby = document.getElementById("inputGroupSelect03").value;
-    getFetchData1(hobby);
+    getFetchData3(hobby);
 }
 
 function getFetchData3(hobby) {
     fetch("/CA2/api/hobby/count/" + hobby) //Need correct API when its made.
-            .then(res => res.json())
-            .then(data => {
-                //console.log("data", data);
-                document.getElementById("output").innerHTML = createTable(data); //needs a better method
-            })
+        .then(res => res.json())
+        .then(data => {
+            //console.log("data", data);
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild = createTable(data); //needs a better method
+        })
 }
+
+//Zipcodes button
+//
+/*function getZipcodes() {
+    fetch("https://dawa.aws.dk/postnumre")
+        .then(res => res.json())
+        .then(data => {
+            //console.log("data", data);
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild = createTable(data);
+        })
+}*/
+
+function testZipcodes() {
+    fetch("https://dawa.aws.dk/postnumre")
+        .then(res => res.json())
+        .then(data => {
+            var zipcodes = [];
+            for (var i in data) {
+                var zip = data[i].nr;
+                var name = data[i].navn;
+                var obj = {
+                    zipcode: zip,
+                    name: name
+                };
+                zipcodes.push(obj);
+            }
+            console.log(zipcodes);
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output").appendChild = createTable(zipcodes);
+        })
+}
+
 
 
 //Automatic table generator
@@ -87,17 +126,17 @@ function createTable(array) {
     array.map(function (obj, index) {
         var tBRow = tBody.insertRow(index);
         Object.keys(obj).map(function (key, index) {
-            if(typeof obj[key] === 'object') {
+            if (typeof obj[key] === 'object') {
                 var objS = [];
                 Object.keys(obj[key]).map(k => {
-                    if(k != "id")
+                    if (k != "id")
                         objS.push(obj[key][k])
                 });
                 tBRow.insertCell(index).innerHTML = objS.join(", ");
             }
             else
                 tBRow.insertCell(index).innerHTML = obj[key];
-            
+
         });
     });
 

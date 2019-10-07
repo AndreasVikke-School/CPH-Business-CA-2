@@ -80,21 +80,18 @@ public class HobbyFacade implements IFacade<Hobby> {
                 em.getTransaction().begin();
                 em.remove(h);
                 em.getTransaction().commit();
-                return h;
             } finally {
                 em.close();
             }
-        } else {
-            throw new IllegalArgumentException("Not a valid id supplied");
         }
+        return h;
     }
 
     public List<Person> getPersonsByHobby(long hobbyId) {
-        //return getEntityManager().createQuery("SELECT person FROM Person person WHERE person.hobbies")
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.hobbies hobbies WHERE hobbies.id = :id", Person.class).setParameter("id", hobbyId).getResultList();
     }
 
     public long getPersonCountByHobby(long hobbyId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT count(person) FROM Person person JOIN person.hobbies hobbies WHERE hobbies.id = :id", Long.class).setParameter("id", hobbyId).getSingleResult();
     }
 }

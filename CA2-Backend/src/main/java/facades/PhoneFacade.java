@@ -74,14 +74,10 @@ public class PhoneFacade implements IFacade<Phone> {
                 em.getTransaction().begin();
                 em.remove(p);
                 em.getTransaction().commit();
-                return p;
             } finally {
                 em.close();
             }
-        } else {
-            throw new IllegalArgumentException("Not a valid id supplied");
         }
-
+        return p;
     }
-
 }

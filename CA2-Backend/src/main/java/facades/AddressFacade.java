@@ -45,20 +45,25 @@ public class AddressFacade implements IFacade<Address> {
     @Override
     public Address add(Address address) {
         EntityManager em = getEntityManager();
+        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
+        Address a = FacadeManager.getSingleResult(em.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.city.id = :id", Address.class).setParameter("street", address.getStreet()).setParameter("id", address.getCity().getId()));
         try {
-            em.getTransaction().begin();
-            CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
             if (ci == null) {
-                ci = new CityInfo(address.getCity().getZip(), address.getCity().getCity());
-                em.persist(ci);
+                em.getTransaction().begin();
+                em.persist(address.getCity());
+                em.getTransaction().commit();
             }
-            address.setCity(ci);
-            em.persist(address);
-            em.getTransaction().commit();
-            return address;
+
+            if (a == null) {
+                a = address;
+                em.getTransaction().begin();
+                em.persist(a);
+                em.getTransaction().commit();
+            }
         } finally {
             em.close();
         }
+        return a;
     }
 
     @Override
@@ -83,12 +88,10 @@ public class AddressFacade implements IFacade<Address> {
                 em.getTransaction().begin();
                 em.remove(a);
                 em.getTransaction().commit();
-                return a;
             } finally {
                 em.close();
             }
-        } else {
-            throw new IllegalArgumentException("Not a valid id supplied");
         }
+        return a;
     }
 }

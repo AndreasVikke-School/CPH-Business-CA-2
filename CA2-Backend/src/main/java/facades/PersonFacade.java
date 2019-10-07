@@ -4,18 +4,20 @@ import entities.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import managers.FacadeManager;
 
 /**
  *
  * @author Joe
  */
 public class PersonFacade implements IFacade<Person> {
+
     private static PersonFacade instance;
     private static EntityManagerFactory emf;
 
     public PersonFacade() {
     }
-    
+
     public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -35,29 +37,60 @@ public class PersonFacade implements IFacade<Person> {
 
     @Override
     public List<Person> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT person FROM Person person", Person.class).getResultList();
     }
 
     @Override
     public Person add(Person person) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = getEntityManager();
+        Person p = FacadeManager.getSingleResult(em.createQuery("SELECT person FROM Person person WHERE person.firstName = :firstName AND person.lastName = :lastName", Person.class).setParameter("firstName", person.getFirsName()).setParameter("lastName", person.getLastName()));
+        if (p == null) {
+            try {
+                p = person;
+                em.getTransaction().begin();
+                em.persist(p);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+        return p;
     }
 
     @Override
     public Person edit(Person person) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(person);
+            em.getTransaction().commit();
+            return person;
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Person delete(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = getEntityManager();
+        Person p = em.find(Person.class, id);
+        if (p != null) {
+            try {
+                em.getTransaction().begin();
+                em.remove(p);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+        return p;
     }
-    
+
     public Person getByPhone(String phone) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.phones phone WHERE phone.number = :number", Person.class).setParameter("number", phone).getSingleResult();
     }
-    
+
     public List<Person> getPersonsByCity(String city) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.address a WHERE a.city.city = :city", Person.class).setParameter("city", city).getResultList();
     }
 }

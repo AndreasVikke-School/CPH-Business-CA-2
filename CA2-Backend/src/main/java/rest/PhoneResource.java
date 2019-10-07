@@ -59,7 +59,7 @@ public class PhoneResource {
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "404", description = "Phone not found")}
     )
-    public PhoneDTO getById(@PathParam("id") long id) throws WebApplicationException {
+    public PhoneDTO getById(@PathParam("id") long id) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
@@ -83,7 +83,7 @@ public class PhoneResource {
                         array = @ArraySchema(schema = @Schema(implementation = Phone.class))),
                         responseCode = "200", description = "Succesful operation")}
     )
-    public List<PhoneDTO> getAll() throws WebApplicationException {
+    public List<PhoneDTO> getAll() {
         List<PhoneDTO> dto = new ArrayList();
         for (Phone p : FACADE.getAll()) {
             dto.add(new PhoneDTO(p));

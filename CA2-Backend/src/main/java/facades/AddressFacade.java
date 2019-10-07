@@ -2,11 +2,9 @@ package facades;
 
 import entities.Address;
 import entities.CityInfo;
-import entities.Phone;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import managers.FacadeManager;
 
 /**

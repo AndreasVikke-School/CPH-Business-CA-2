@@ -29,9 +29,8 @@ function getFetchData1(hobby) {
     fetch("/CA2/api/Hobbies/" + hobby) //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
-            //console.log("data", data);
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(data);
+            document.getElementById("output").appendChild(createTable(data));
         })
 }
 
@@ -47,9 +46,8 @@ function getFetchData2(city) {
     fetch("/CA2/api/Cities/" + city) //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
-            //console.log("data", data);
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(data);
+            document.getElementById("output").appendChild(createTable(data));
         })
 }
 
@@ -67,10 +65,14 @@ function getFetchData3(hobby) {
         .then(data => {
             //console.log("data", data);
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(data); //needs a better method
+            document.getElementById("output").appendChild(createTable(data)); //needs a better method
         })
 }
 
+
+//Zipcode button
+//Sets .output to have a div with an overflow class, then sets that div
+//to a table of all zipcodes in denmark. Zipcodes is from API dawa.aws.dk/postnumre.
 function getZipcodes() {
     fetch("https://dawa.aws.dk/postnumre")
         .then(res => res.json())

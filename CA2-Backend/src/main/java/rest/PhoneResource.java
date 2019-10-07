@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PhoneDTO;
 import entities.Phone;
+import errorhandling.GenericExceptionMapper;
 import utils.EMF_Creator;
 import facades.PhoneFacade;
 import java.util.ArrayList;
@@ -13,10 +14,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("phone")
-public class PhoneResource implements iResource<PhoneDTO>{
+public class PhoneResource implements iResource<PhoneDTO, Response>{
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
@@ -50,18 +52,29 @@ public class PhoneResource implements iResource<PhoneDTO>{
 
     @Override
     public PhoneDTO add(PhoneDTO obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Phone p = new Phone(obj.getNumber(), obj.getDescription());
+        PhoneDTO dto = new PhoneDTO(FACADE.add(p));
+        return dto;
         
     }
 
     @Override
     public PhoneDTO edit(PhoneDTO obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Phone p = new Phone(obj.getNumber(), obj.getDescription());
+        PhoneDTO dto = new PhoneDTO(FACADE.edit(p));
+        return dto;
     }
 
     @Override
-    public PhoneDTO delete(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Response delete(long id) {
+//        try{
+//        PhoneDTO dto = new PhoneDTO(FACADE.getById(id));
+//        FACADE.delete(dto.getId());
+//        return Response.ok().build();
+//        }catch(GenericExceptionMapper ex){
+//            
+//        }
+throw new UnsupportedOperationException("nah");
     }
 
     

@@ -9,7 +9,7 @@ import managers.FacadeManager;
 
 /**
  *
- * @author Joe
+ * @author Martin Frederiksen
  */
 public class HobbyFacade implements IFacade<Hobby> {
 
@@ -47,16 +47,15 @@ public class HobbyFacade implements IFacade<Hobby> {
         Hobby h = FacadeManager.getSingleResult(em.createQuery("SELECT hobby FROM Hobby hobby WHERE hobby.name = :name AND hobby.description = :description", Hobby.class).setParameter("name", hobby.getName()).setParameter("description", hobby.getDescription()));
         if (h == null) {
             try {
+                h = hobby;
                 em.getTransaction().begin();
                 em.persist(h);
                 em.getTransaction().commit();
             } finally {
                 em.close();
             }
-        } else {
-            hobby = h;
         }
-        return hobby;
+        return h;
     }
 
     @Override
@@ -76,13 +75,17 @@ public class HobbyFacade implements IFacade<Hobby> {
     public Hobby delete(long id) {
         EntityManager em = getEntityManager();
         Hobby h = em.find(Hobby.class, id);
-        try {
-            em.getTransaction().begin();
-            em.persist(h);
-            em.getTransaction().commit();
-            return h;
-        } finally {
-            em.close();
+        if (h != null) {
+            try {
+                em.getTransaction().begin();
+                em.remove(h);
+                em.getTransaction().commit();
+                return h;
+            } finally {
+                em.close();
+            }
+        } else {
+            throw new IllegalArgumentException("Not a valid id supplied");
         }
     }
 

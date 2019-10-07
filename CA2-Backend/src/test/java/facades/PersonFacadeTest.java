@@ -65,18 +65,18 @@ public class PersonFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Phone p1 = new Phone("22883099","Phone description");
+            Phone p1 = new Phone("22883099", "Phone description");
             em.persist(p1);
-            Phone p2 = new Phone("22759304","Phone description 2 - The Redemption");
+            Phone p2 = new Phone("22759304", "Phone description 2 - The Redemption");
             em.persist(p2);
             List<Phone> phones = new ArrayList();
             phones.add(p1);
             phones.add(p2);
-            CityInfo ci = new CityInfo("2900","Hellerup");
+            CityInfo ci = new CityInfo("2900", "Hellerup");
             em.persist(ci);
-            Address a = new Address("Hellerupvej",ci);
+            Address a = new Address("Hellerupvej", ci);
             em.persist(a);
-            InfoEntity ie = new InfoEntity("Email@email.com",phones,a);
+            InfoEntity ie = new InfoEntity("Email@email.com", phones, a);
             em.persist(ie);
             Hobby hobby1 = new Hobby("Revolutionist", "I like to start revoultions");
             em.persist(hobby1);
@@ -85,10 +85,10 @@ public class PersonFacadeTest {
             List<Hobby> hobbies = new ArrayList();
             hobbies.add(hobby1);
             hobbies.add(hobby2);
-            Person p = new Person("Emil", "Svens", hobbies,ie);
+            Person p = new Person("Emil", "Svens", hobbies, ie);
             em.persist(p);
-            
-            p = new Person("Be", "Svens", hobbies,ie);
+
+            p = new Person("Be", "Svens", hobbies, ie);
             em.persist(p);
             em.getTransaction().commit();
         } finally {
@@ -103,18 +103,18 @@ public class PersonFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            Phone p1 = new Phone("22883099","Phone description");
+            Phone p1 = new Phone("22883099", "Phone description");
             em.persist(p1);
-            Phone p2 = new Phone("22759304","Phone description 2 - The Redemption");
+            Phone p2 = new Phone("22759304", "Phone description 2 - The Redemption");
             em.persist(p2);
             List<Phone> phones = new ArrayList();
             phones.add(p1);
             phones.add(p2);
-            CityInfo ci = new CityInfo("2900","Hellerup");
+            CityInfo ci = new CityInfo("2900", "Hellerup");
             em.persist(ci);
-            Address a = new Address("Hellerupvej",ci);
+            Address a = new Address("Hellerupvej", ci);
             em.persist(a);
-            InfoEntity ie = new InfoEntity("Email@email.com",phones,a);
+            InfoEntity ie = new InfoEntity("Email@email.com", phones, a);
             em.persist(ie);
             Hobby hobby1 = new Hobby("Revolutionist", "I like to start revoultions");
             em.persist(hobby1);
@@ -123,7 +123,7 @@ public class PersonFacadeTest {
             List<Hobby> hobbies = new ArrayList();
             hobbies.add(hobby1);
             hobbies.add(hobby2);
-            Person p = new Person("Emil", "Svens", hobbies,ie);
+            Person p = new Person("Emil", "Svens", hobbies, ie);
             em.persist(p);
             em.getTransaction().commit();
             expected = p.getId();
@@ -141,17 +141,172 @@ public class PersonFacadeTest {
 
     @Test
     public void testAdd() {
-       
+        EntityManager em = emf.createEntityManager();
+        int expected = 1;
+        int result = 0;
+
+        List<Hobby> hobbies = new ArrayList();
+        Hobby hobby = new Hobby("Hiking", "Not fun");
+        hobbies.add(hobby);
+        List<Phone> phones = new ArrayList();
+        Phone phone = new Phone("12345678", "work");
+        phones.add(phone);
+        CityInfo ci = new CityInfo("2900", "Hellerup");
+        Address address = new Address("Hellerupvej", ci);
+        InfoEntity ie = new InfoEntity("william@mail.dk", phones, address);
+
+        try {
+            em.getTransaction().begin();
+            expected += em.createNamedQuery("Person.findAll").getResultList().size();
+            em.persist(hobby);
+            em.persist(phone);
+            em.persist(ci);
+            em.persist(address);
+            em.persist(ie);
+            em.getTransaction().commit();
+            facade.add(new Person("William", "Test", hobbies, ie));
+            result = em.createNamedQuery("Person.findAll").getResultList().size();
+        } finally {
+            em.close();
+        }
+        assertEquals(expected, result);
     }
 
     @Test
     public void testEdit() {
-        
+        EntityManager em = emf.createEntityManager();
+        String expected = "Bodil";
+        Person result;
+
+        List<Hobby> hobbies = new ArrayList();
+        Hobby hobby = new Hobby("Hiking", "Much fun");
+        hobbies.add(hobby);
+        List<Phone> phones = new ArrayList();
+        Phone phone = new Phone("12345678", "home");
+        phones.add(phone);
+        CityInfo ci = new CityInfo("2300", "Amager");
+        Address address = new Address("Amagerbrogade", ci);
+        InfoEntity ie = new InfoEntity("Marib@mail.dk", phones, address);
+        Person p = new Person("Karsten", "Andersen", hobbies, ie);
+
+        try {
+            em.getTransaction().begin();
+            em.persist(hobby);
+            em.persist(phone);
+            em.persist(ci);
+            em.persist(address);
+            em.persist(ie);
+            em.persist(p);
+            em.getTransaction().commit();
+            p.setFirsName(expected);
+            result = p;
+        } finally {
+            em.close();
+        }
+        assertEquals(expected, result.getFirsName());
     }
 
     @Test
     public void testDelete() {
+        EntityManager em = emf.createEntityManager();
+        int expected = 0;
+        int result = 0;
         
+        List<Hobby> hobbies = new ArrayList();
+        Hobby hobby = new Hobby("Running", " fun");
+        hobbies.add(hobby);
+        List<Phone> phones = new ArrayList();
+        Phone phone = new Phone("123478", "Work");
+        phones.add(phone);
+        CityInfo ci = new CityInfo("2300", "Amager");
+        Address address = new Address("Ørestads Boulevard", ci);
+        InfoEntity ie = new InfoEntity("Marib@mail.dk", phones, address);
+        Person p = new Person("Kim", "Andersen", hobbies, ie);
+        
+        try {
+            em.getTransaction().begin();
+            expected += em.createNamedQuery("Person.findAll").getResultList().size();
+            em.persist(hobby);
+            em.persist(phone);
+            em.persist(ci);
+            em.persist(address);
+            em.persist(ie);
+            em.persist(p);
+            em.getTransaction().commit();
+            Long deleteMe = p.getId();
+            facade.delete(deleteMe);
+            result = em.createNamedQuery("Person.findAll").getResultList().size();
+        } finally {
+            em.close();
+        }
+        assertEquals(expected, result);
+    }
+    
+    @Test
+    public void testGetByPhone() {
+        EntityManager em = emf.createEntityManager();
+        Phone expected;
+        Phone result;
+        
+        List<Hobby> hobbies = new ArrayList();
+        Hobby hobby = new Hobby("Climbing", "Not fun");
+        hobbies.add(hobby);
+        List<Phone> phones = new ArrayList();
+        Phone phone = new Phone("34343434", "Work");
+        expected = new Phone("69696969", "Home");
+        phones.add(phone);
+        phones.add(expected);
+        CityInfo ci = new CityInfo("2300", "Amager");
+        Address address = new Address("Ørestads Boulevard", ci);
+        InfoEntity ie = new InfoEntity("Tudekiks@mail.dk", phones, address);
+        Person p = new Person("Tud", "Kim", hobbies, ie);
+        
+        
+        try {
+            em.getTransaction().begin();
+            em.persist(hobby);
+            em.persist(phone);
+            em.persist(ci);
+            em.persist(ie);
+            em.persist(p);
+            em.getTransaction().commit();
+            result = p.getPhones().get(1);
+        } finally {
+            em.close();
+        }
+        assertEquals(expected, result);
     }
 
+    @Test
+    public void testGetByCity() {
+        EntityManager em = emf.createEntityManager();
+        String expected = "Amager";
+        String result;
+        
+        List<Hobby> hobbies = new ArrayList();
+        Hobby hobby = new Hobby("Climbing", "Not fun");
+        hobbies.add(hobby);
+        List<Phone> phones = new ArrayList();
+        Phone phone = new Phone("34343434", "Work");
+        phones.add(phone);
+        CityInfo ci = new CityInfo("2300", "Amager");
+        Address address = new Address("Ørestads Boulevard", ci);
+        InfoEntity ie = new InfoEntity("Tudekiks@mail.dk", phones, address);
+        Person p = new Person("Tud", "Kim", hobbies, ie);
+        
+        
+        try {
+            em.getTransaction().begin();
+            em.persist(hobby);
+            em.persist(phone);
+            em.persist(ci);
+            em.persist(ie);
+            em.persist(p);
+            em.getTransaction().commit();
+            result = p.getAddress().getCity().getCity();
+        } finally {
+            em.close();
+        }
+        assertEquals(expected, result);
+    }
 }

@@ -106,7 +106,7 @@ public class AddressResource {
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "400", description = "Invalid Id supplied")}
+                        responseCode = "400", description = "Invalid input")}
     )
     public AddressDTO add(AddressDTO addressDTO) throws WebApplicationException {
         if (addressDTO == null
@@ -133,14 +133,16 @@ public class AddressResource {
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "400", description = "Invalid Id supplied"),
+                        responseCode = "400", description = "Invalid input"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "404", description = "Address not found")}
     )
     public AddressDTO edit(@PathParam("id") long id, AddressDTO addressDTO) {
         if (id <= 0 || addressDTO == null
-                || addressDTO.getStreet() == null || addressDTO.getCityInfo()== null
+                || addressDTO.getStreet() == null || addressDTO.getCityInfo() == null
+                || addressDTO.getCityInfo().getZip() == null || addressDTO.getCityInfo().getCity() == null
+                || addressDTO.getCityInfo().getZip().isEmpty() || addressDTO.getCityInfo().getCity().isEmpty()
                 || addressDTO.getStreet().isEmpty()) {
             throw new WebApplicationException("Invalid input", 400);
         }

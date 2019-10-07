@@ -97,18 +97,19 @@ function testZipcodes() {
                 };
                 zipcodes.push(obj);
             }
-            console.log(zipcodes);
-            document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild = createTable(zipcodes);
+            document.getElementById("output").innerHTML = "<div id=\"output2\" class=\"table-wrapper-scroll-y my-custom-scrollbar\"></div >";
+            document.getElementById("output2").appendChild(createTable(zipcodes));
         })
 }
 
 
 
+
 //Automatic table generator
 function createTable(array) {
-    if (!Array.isArray(array))
+    if (!Array.isArray(array)) {
         array = [array];
+    }
 
     var table = document.createElement("table");
     table.classList.add("table");

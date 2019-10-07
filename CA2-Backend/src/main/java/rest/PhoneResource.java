@@ -27,7 +27,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-//Todo Remove or change relevant parts before ACTUAL use
 @Path("phone")
 public class PhoneResource {
     

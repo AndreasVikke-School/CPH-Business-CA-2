@@ -2,6 +2,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
@@ -9,8 +10,12 @@ import javax.persistence.NamedQuery;
  * @author Martin Frederiksen
  */
 @Entity
-@NamedQuery(name = "Company.deleteAllRows", query = "DELETE from Company")
+@NamedQueries({
+    @NamedQuery(name = "Company.deleteAllRows", query = "DELETE from Company"),
+    @NamedQuery(name = "Company.findAll", query = "SELECT c FROM Company c")
+})
 public class Company extends InfoEntity implements Serializable {
+
     private String name;
     private String description;
     private String cvr;

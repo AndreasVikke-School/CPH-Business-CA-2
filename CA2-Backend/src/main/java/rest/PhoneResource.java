@@ -101,12 +101,12 @@ public class PhoneResource {
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "400", description = "Invalid Id supplied")}
+                        responseCode = "400", description = "Invalid input")}
     )
     public PhoneDTO add(PhoneDTO phoneDTO) throws WebApplicationException {
         if (phoneDTO == null
                 || phoneDTO.getNumber() == null || phoneDTO.getDescription() == null
-                || phoneDTO.getNumber().isEmpty() || phoneDTO.getNumber().isEmpty()) {
+                || phoneDTO.getNumber().isEmpty() || phoneDTO.getDescription().isEmpty()) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
@@ -128,7 +128,7 @@ public class PhoneResource {
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
-                        responseCode = "400", description = "Invalid Id supplied"),
+                        responseCode = "400", description = "Invalid input"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "404", description = "Phone not found")}
@@ -136,7 +136,7 @@ public class PhoneResource {
     public PhoneDTO edit(@PathParam("id") long id, PhoneDTO obj) {
         if (id <= 0 || obj == null
                 || obj.getNumber() == null || obj.getDescription() == null
-                || obj.getNumber().isEmpty() || obj.getNumber().isEmpty()) {
+                || obj.getNumber().isEmpty() || obj.getDescription().isEmpty()) {
             throw new WebApplicationException("Invalid input", 400);
         }
 

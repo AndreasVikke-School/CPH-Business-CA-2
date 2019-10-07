@@ -88,7 +88,7 @@ public class CompanyFacade implements IFacade<Company> {
         return getEntityManager().createQuery("SELECT company FROM Company company JOIN company.phones phone WHERE phone.number = :number", Company.class).setParameter("number", phone).getSingleResult();
     }
 
-    public Company getByCVR(String cvr) throws Throwable {
+    public Company getByCVR(String cvr) {
         return getEntityManager().createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr", Company.class).setParameter("cvr", cvr).getSingleResult();
     }
 }

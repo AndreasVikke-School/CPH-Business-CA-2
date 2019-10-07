@@ -69,8 +69,14 @@ public class AddressFacade implements IFacade<Address> {
     @Override
     public Address edit(Address address) {
         EntityManager em = getEntityManager();
+        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
         try {
             em.getTransaction().begin();
+            if(ci == null) {
+                em.persist(address.getCity());
+            } else {
+                address.setCity(ci);
+            }
             em.merge(address);
             em.getTransaction().commit();
             return address;

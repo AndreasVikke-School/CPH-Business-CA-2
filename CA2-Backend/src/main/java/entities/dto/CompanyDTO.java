@@ -39,6 +39,9 @@ public class CompanyDTO extends InfoEntityDTO {
         this.marketValue = company.getMarketValue();
     }
 
+    public CompanyDTO() {
+    }
+
     public String getName() {
         return name;
     }

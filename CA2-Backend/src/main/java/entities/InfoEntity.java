@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@NamedQuery(name = "InfoEntity.deleteAllRows", query = "DELETE from InfoEntity")
 public class InfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

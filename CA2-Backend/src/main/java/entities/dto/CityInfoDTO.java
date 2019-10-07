@@ -1,4 +1,4 @@
-package dto;
+package entities.dto;
 
 import entities.CityInfo;
 import io.swagger.v3.oas.annotations.media.Schema;

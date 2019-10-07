@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
@@ -11,7 +12,10 @@ import javax.persistence.NamedQuery;
  * @author Martin Frederiksen
  */
 @Entity
-@NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person")
+@NamedQueries({
+    @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person"),
+    @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
+})
 public class Person extends InfoEntity implements Serializable {
     private String firsName;
     private String lastName;

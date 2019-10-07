@@ -19,6 +19,11 @@ public class HobbyDTO {
     private String description;
     private List<PersonDTO> persons;
 
+    public HobbyDTO() {
+    }
+
+    
+    
     public HobbyDTO(long id, String name, String description, List<PersonDTO> persons) {
         this.id = id;
         this.name = name;

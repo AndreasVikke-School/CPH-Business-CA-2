@@ -3,9 +3,26 @@ package rest;
 
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Course Assignment 2",
+                version = "1.0",
+                description = "CA-2 API documentation"),
+        servers = {
+                @Server(
+                        description = "LocalHost",
+                        url = "http://localhost:8080/ca2"),
+                @Server(
+                        description = "Deployed",
+                        url = "https://andreasvikke.dk/CA2-Backend")
+        }
+)
 @javax.ws.rs.ApplicationPath("api")
 public class ApplicationConfig extends Application {
 
@@ -30,7 +47,6 @@ public class ApplicationConfig extends Application {
         resources.add(errorhandling.GenericExceptionMapper.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
         resources.add(rest.PhoneResource.class);
-        resources.add(rest.RenameMeResource.class);
     }
 
 }

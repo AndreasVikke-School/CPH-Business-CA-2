@@ -28,6 +28,9 @@ public class AddressDTO {
         
         this.cityInfo = new CityInfoDTO(address.getCity());
     }
+    
+    public AddressDTO() {
+    }
 
     public long getId() {
         return id;

@@ -36,6 +36,9 @@ class PersonDTO extends InfoEntityDTO {
             this.hobbies.add(new HobbyDTO(h));
     }
 
+    public PersonDTO() {
+    }
+
     public String getFirsName() {
         return firsName;
     }

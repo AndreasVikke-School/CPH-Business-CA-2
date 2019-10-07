@@ -1,8 +1,11 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package facades;
 
-import utils.EMF_Creator;
-import entities.Address;
-import entities.CityInfo;
+import entities.Phone;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -11,22 +14,22 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import utils.EMF_Creator.DbSelector;
-import utils.EMF_Creator.Strategy;
+import utils.EMF_Creator;
 
-//Uncomment the line below, to temporarily disable this test
-@Disabled
-public class AddressFacadeTest {
-
+/**
+ *
+ * @author APC
+ */
+public class PhoneFacadeTest {
+    
     private static EntityManagerFactory emf;
-    private static AddressFacade facade;
-    private List<Address> addresses;
-
-    public AddressFacadeTest() {
+    private static PhoneFacade facade;
+    private List<Phone> phones;
+    
+    public PhoneFacadeTest() {
     }
-
+    
     //@BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
@@ -35,32 +38,27 @@ public class AddressFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = AddressFacade.getAddressFacade(emf);
+        facade = PhoneFacade.getPhoneFacade(emf);
     }
-
-    /*   **** HINT **** 
-        A better way to handle configuration values, compared to the UNUSED example above, is to store those values
-        ONE COMMON place accessible from anywhere.
-        The file config.properties and the corresponding helper class utils.Settings is added just to do that. 
-        See below for how to use these files. This is our RECOMENDED strategy
-     */
+    
+    
     @BeforeAll
     public static void setUpClassV2() {
-        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.DROP_AND_CREATE);
-        facade = AddressFacade.getAddressFacade(emf);
+        emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
+        facade = PhoneFacade.getPhoneFacade(emf);
     }
-
+    
     @AfterAll
     public static void tearDownClass() {
 //        Clean up database after test is done or use a persistence unit with drop-and-create to start up clean on every test
     }
-
+    
     // Setup the DataBase in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the script below to use YOUR OWN entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        addresses = new ArrayList();
+        phones = new ArrayList();
         try {
             em.getTransaction().begin();
 
@@ -70,68 +68,62 @@ public class AddressFacadeTest {
             em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Company.deleteAllRows").executeUpdate();
 
-            CityInfo ci = new CityInfo("2900", "Hellerup");
-            em.persist(ci);
-
-            Address address1 = new Address("Strandvejen", ci);
-            Address address2 = new Address("Hellerupvej", ci);
-            em.persist(address1);
-            em.persist(address2);
+            Phone phone = new Phone("12345678", "Home");
+            Phone phone2 = new Phone("87654321", "Work");
+            em.persist(phone);
+            em.persist(phone2);
 
             em.getTransaction().commit();
 
-            addresses.add(address1);
-            addresses.add(address2);
+            phones.add(phone);
+            phones.add(phone2);
         } finally {
             em.close();
         }
     }
-
+    
     @Test
-    public void testGetById() {
-        Long expected = addresses.get(0).getId();
+    public void testGetPhoneById() {
+        Long expected = phones.get(0).getId();
         assertEquals(expected, facade.getById(expected).getId());
     }
-
+    
     @Test
     public void testGetAll() {
-        assertEquals(2, facade.getAll().size(), "Expects two rows in the database");
+        assertEquals(phones.size(), facade.getAll().size());
     }
-
+    
     @Test
     public void testAdd() {
         EntityManager em = emf.createEntityManager();
-        int expected;
-        int result;
-        CityInfo ci;
+        int expected = 0;
+        int result = 0;
         try {
             em.getTransaction().begin();
-            expected = em.createNamedQuery("Address.findAll").getResultList().size();
-
-            ci = new CityInfo("2900", "Hellerup");
-            em.persist(ci);
+            
+            expected = em.createQuery("SELECT p FROM Phone p", Phone.class).getResultList().size();
+            em.persist(new Phone("8888888", "L'easy"));
             em.getTransaction().commit();
-
-            facade.add(new Address("Dagmarvej", ci));
-            result = em.createNamedQuery("Address.findAll").getResultList().size();
+            
+            result = em.createQuery("SELECT p FROM Phone p", Phone.class).getResultList().size();
         } finally {
             em.close();
         }
         assertEquals(expected + 1, result);
     }
-
+    
     @Test
     public void testEdit() {
-        Address result;
-        String expected = "Nytvejnavn";
+        Phone result;
+        String expected = "00000000";
 
-        addresses.get(0).setStreet(expected);
-        facade.edit(addresses.get(0));
-        result = addresses.get(0);
+        phones.get(0).setNumber(expected);
+        facade.edit(phones.get(0));
+        result = phones.get(0);
 
-        assertEquals(expected, result.getStreet());
+        assertEquals(expected, result.getNumber());
     }
-
+    
     @Test
     public void testDelete() {
         EntityManager em = emf.createEntityManager();
@@ -139,13 +131,14 @@ public class AddressFacadeTest {
         int result = 0;
         try {
             em.getTransaction().begin();
-            expected = em.createNamedQuery("Address.findAll").getResultList().size();
-            facade.delete(addresses.get(0).getId());
-            result = em.createNamedQuery("Address.findAll").getResultList().size();
+            expected = em.createQuery("SELECT p FROM Phone p", Phone.class).getResultList().size();
+            facade.delete(phones.get(0).getId());
+            result = em.createQuery("SELECT p FROM Phone p", Phone.class).getResultList().size();
         } finally {
             em.close();
         }
         assertEquals(expected - 1, result);
     }
-
+    
+    
 }

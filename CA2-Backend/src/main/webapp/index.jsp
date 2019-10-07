@@ -15,6 +15,9 @@
         <li>
             <a href="openapi/">OpenAPI</a>
         </li>
+        <li>
+            <a href="scrum.jsp">SCRUM Plan</a>
+        </li>
     </ul>
 </div>
 

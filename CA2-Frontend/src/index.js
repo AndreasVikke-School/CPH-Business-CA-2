@@ -1,11 +1,72 @@
 import 'bootstrap/dist/css/bootstrap.css'
 
+
 window.onload = () => {
-    document.getElementById("container").append(createTable([{"firstname" : "Andreas", "lastname" : "Vikke"},
+    document.getElementById("output").append(createTable([{"firstname" : "Andreas", "lastname" : "Vikke"},
     {"firstname" : "Emil", "lastname" : "Svensmark"}]));
+    var btnHobby = document.getElementById("hobbyBtn");
+    btnHobby.addEventListener("click", getHobby);
+
+    var btnCity = document.getElementById("cityBtn");
+    btnCity.addEventListener("click", getCity);
+
+    var btnCount = document.getElementById("countBtn");
+    btnCount.addEventListener("click", getHobbyCount);
 }
 
 
+//Hobby button
+//Sets .output to a table with all persons with a hobby
+function getHobby() {
+    var hobby = document.getElementById("inputGroupSelect01").value;
+    getFetchData1(hobby);
+}
+
+function getFetchData1(hobby) {
+    fetch("/CA2/api/Hobbies/" + hobby) //Need correct API when its made.
+            .then(res => res.json())
+            .then(data => {
+                //console.log("data", data);
+                document.getElementById("output").innerHTML = createTable(data);
+            })
+}
+
+
+//City button
+//Sets .output to a table with all persons from a city
+function getCity() {
+    var city = document.getElementById("inputGroupSelect02").value;
+    getFetchData1(city);
+}
+
+function getFetchData2(city) {
+    fetch("/CA2/api/Cities/" + city) //Need correct API when its made.
+            .then(res => res.json())
+            .then(data => {
+                //console.log("data", data);
+                document.getElementById("output").innerHTML = createTable(data);
+            })
+}
+
+
+//Hobby Count button
+//Sets .output to a number equal to the amount of people from a city
+function getHobbyCount() {
+    var hobby = document.getElementById("inputGroupSelect03").value;
+    getFetchData1(hobby);
+}
+
+function getFetchData3(hobby) {
+    fetch("/CA2/api/hobby/count/" + hobby) //Need correct API when its made.
+            .then(res => res.json())
+            .then(data => {
+                //console.log("data", data);
+                document.getElementById("output").innerHTML = createTable(data); //needs a better method
+            })
+}
+
+
+//Automatic table generator
 function createTable(array) {
     if (!Array.isArray(array))
         array = [array];

@@ -209,7 +209,7 @@ public class CompanyFacadeTest {
     }
     
     @Test
-    public void testGetByPhone() {
+    public void testGetByPhone() throws Throwable {
         EntityManager em = emf.createEntityManager();
         String expected;
         try {

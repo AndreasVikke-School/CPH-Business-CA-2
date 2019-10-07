@@ -1,10 +1,6 @@
 package facades;
 
-import entities.Address;
-import entities.CityInfo;
 import entities.Company;
-import entities.Hobby;
-import entities.InfoEntity;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -89,7 +85,7 @@ public class CompanyFacade implements IFacade<Company> {
     }
 
     public Company getByPhone(String phone) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getEntityManager().createQuery("SELECT company FROM Company company JOIN company.phones phone WHERE phone.number = :number", Company.class).setParameter("number", phone).getSingleResult();
     }
 
     public Company getByCVR(String cvr) {

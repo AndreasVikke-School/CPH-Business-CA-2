@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries ({
     @NamedQuery(name = "Address.deleteAllRows", query = "DELETE from Address"),
-    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
+    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a")
 })
 public class Address implements Serializable {
 

@@ -19,13 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import utils.EMF_Creator;
 
 /**
@@ -88,7 +91,7 @@ public class PersonResource {
             phones.add(ph);
             pFACADE.add(ph);
         }
-        
+
         CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
                 obj.getAddress().getCityInfo().getCity());
 
@@ -109,8 +112,63 @@ public class PersonResource {
         Person p = new Person(obj.getFirsName(), obj.getLastName(), hobby, ie);
 
         PersonDTO dto = new PersonDTO(FACADE.add(p));
-        
+
         return dto;
+    }
+
+    @PUT
+    @Path("/edit/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PersonDTO editPerson(@PathParam("id") long id, PersonDTO obj) {
+
+        Person p = FACADE.getById(id);
+
+        List<Phone> phones = new ArrayList();
+        for (PhoneDTO phone : obj.getPhones()) {
+            Phone ph = new Phone(phone.getNumber(), phone.getDescription());
+            phones.add(ph);
+            pFACADE.add(ph);
+        }
+
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
+                obj.getAddress().getCityInfo().getCity());
+
+        Address address = new Address(obj.getAddress().getStreet(),
+                ci);
+
+        aFACADE.add(address);
+
+        InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
+
+        List<Hobby> hobby = new ArrayList();
+        for (HobbyDTO h : obj.getHobbies()) {
+            Hobby ho = new Hobby(h.getName(), h.getDescription());
+            ho = hFACADE.add(ho);
+            hobby.add(ho);
+        }
+
+        p.setFirsName(obj.getFirsName());
+        p.setLastName(obj.getLastName());
+        p.setHobbies(hobby);
+
+        PersonDTO dto = new PersonDTO(FACADE.edit(p));
+
+        return dto;
+
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePerson(@PathParam("id") long id) {
+        Person p = FACADE.getById(id);
+        FACADE.delete(id);
+
+        return Response.status(200)
+                .entity("{\"code\" : \"200\", \"message\" : \"Person with id: " + p.getId()
+                        + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
     }
 
 }

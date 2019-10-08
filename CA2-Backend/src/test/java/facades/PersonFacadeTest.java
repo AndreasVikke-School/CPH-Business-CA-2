@@ -207,7 +207,7 @@ public class PersonFacadeTest {
     }
 
     
-    //@Disabled
+    @Disabled
     @Test
     public void testGetPersonsByCity() {
         

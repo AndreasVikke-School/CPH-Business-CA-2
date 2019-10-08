@@ -146,8 +146,8 @@ public class AddressResource {
             throw new WebApplicationException("Address not found", 404);
         }
 
-        a.setStreet(addressDTO.getStreet());
-        a.setCityInfo(new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        a.setStreet(addressdto.getStreet());
+        a.setCityInfo(new CityInfo(addressdto.getCityInfo().getZip(), addressdto.getCityInfo().getCity()));
         Address address = FACADE.edit(a);
         return new AddressDTO(address);
     }

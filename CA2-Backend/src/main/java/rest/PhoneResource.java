@@ -103,14 +103,12 @@ public class PhoneResource {
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "400", description = "Invalid input")}
     )
-    public PhoneDTO add(PhoneDTO phoneDTO) throws WebApplicationException {
-        if (phoneDTO == null
-                || phoneDTO.getNumber() == null || phoneDTO.getDescription() == null
-                || phoneDTO.getNumber().isEmpty() || phoneDTO.getDescription().isEmpty()) {
+    public PhoneDTO add(PhoneDTO phonedto) throws WebApplicationException {
+        if (!validatePhoneDTO(phonedto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
-        Phone phone = new Phone(phoneDTO.getNumber(), phoneDTO.getDescription());
+        Phone phone = new Phone(phonedto.getNumber(), phonedto.getDescription());
         PhoneDTO dto = new PhoneDTO(FACADE.add(phone));
         return dto;
     }
@@ -133,10 +131,8 @@ public class PhoneResource {
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "404", description = "Phone not found")}
     )
-    public PhoneDTO edit(@PathParam("id") long id, PhoneDTO obj) {
-        if (id <= 0 || obj == null
-                || obj.getNumber() == null || obj.getDescription() == null
-                || obj.getNumber().isEmpty() || obj.getDescription().isEmpty()) {
+    public PhoneDTO edit(@PathParam("id") long id, PhoneDTO phonedto) {
+        if (id <= 0 || !validatePhoneDTO(phonedto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
@@ -145,8 +141,8 @@ public class PhoneResource {
             throw new WebApplicationException("Phone not found", 404);
         }
 
-        p.setNumber(obj.getNumber());
-        p.setDescription(obj.getDescription());
+        p.setNumber(phonedto.getNumber());
+        p.setDescription(phonedto.getDescription());
         Phone phone = FACADE.edit(p);
         return new PhoneDTO(phone);
     }
@@ -182,5 +178,14 @@ public class PhoneResource {
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Phone with id: " + phone.getId() + " deleted successfully.\"}")
                 .type(MediaType.APPLICATION_JSON).build();
+    }
+    
+    private boolean validatePhoneDTO(PhoneDTO phonedto) {
+        if (phonedto == null
+                || phonedto.getNumber() == null || phonedto.getDescription() == null
+                || phonedto.getNumber().isEmpty() || phonedto.getDescription().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

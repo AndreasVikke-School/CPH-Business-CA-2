@@ -1,12 +1,14 @@
 package rest;
 
-import entities.Phone;
-import entities.dto.PhoneDTO;
+import entities.Hobby;
+import entities.dto.PersonDTO;
+import entities.dto.HobbyDTO;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -24,11 +26,11 @@ import utils.EMF_Creator.Strategy;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
-public class PhoneResourceTest {
+public class HobbyResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Phone p1, p2;
+    private static Hobby h1, h2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -65,13 +67,13 @@ public class PhoneResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        p1 = new Phone("12345678", "Mobile");
-        p2 = new Phone("12345679", "Home");
+        h1 = new Hobby("Foodball", "Ball Foot");
+        h2 = new Hobby("Fishing", "Lake Fishing");
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
-            em.persist(p1);
-            em.persist(p2);
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.persist(h1);
+            em.persist(h2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -82,17 +84,17 @@ public class PhoneResourceTest {
     public void testGetById200() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/" + p1.getId()).then()
+                .get("/hobby/" + h1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo(p1.getNumber()));
+                .body("name", equalTo(h1.getName()));
     }
 
     @Test
     public void testGetById400() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/0").then()
+                .get("/hobby/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -101,7 +103,7 @@ public class PhoneResourceTest {
     public void testGetById404() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/9").then()
+                .get("/hobby/9").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
@@ -110,7 +112,7 @@ public class PhoneResourceTest {
     public void testGetAll200() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/all").then()
+                .get("/hobby/all").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("size()", equalTo(2));
@@ -120,25 +122,25 @@ public class PhoneResourceTest {
     public void testAdd200() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Phone"))
-                .post("/phone/add").then()
+                .body(new HobbyDTO(0, "Riding", "Test Hobby", new ArrayList<PersonDTO>()))
+                .post("/hobby/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo("12345677"));
+                .body("name", equalTo("Riding"));
     }
     
     @Test
     public void testAdd400() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "", "Test Phone"))
-                .post("/phone/add").then()
+                .body(new HobbyDTO(0, "", "Test Hobby", new ArrayList<PersonDTO>()))
+                .post("/hobby/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", null))
-                .post("/phone/add").then()
+                .body(new HobbyDTO(0, "Riding", null, new ArrayList<PersonDTO>()))
+                .post("/hobby/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -147,33 +149,33 @@ public class PhoneResourceTest {
     public void testEdit200() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new HobbyDTO(0, "Programming", "Test Edit", new ArrayList<PersonDTO>()))
+                .put("/hobby/edit/" + h1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo("12345677"));
+                .body("name", equalTo("Programming"));
     }
     
     @Test
     public void testEdit400() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/0").then()
+                .body(new HobbyDTO(0, "Programming", "Test Edit", new ArrayList<PersonDTO>()))
+                .put("/hobby/edit/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
         
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", ""))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new HobbyDTO(0, "Programming", "", new ArrayList<PersonDTO>()))
+                .put("/hobby/edit/" + h1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
         
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, null, "Test Edit"))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new HobbyDTO(0, null, "Test Edit", new ArrayList<PersonDTO>()))
+                .put("/hobby/edit/" + h1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -182,8 +184,8 @@ public class PhoneResourceTest {
     public void testEdit404() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/99").then()
+                .body(new HobbyDTO(0, "Programming", "Test Edit", new ArrayList<PersonDTO>()))
+                .put("/hobby/edit/99").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
@@ -192,7 +194,7 @@ public class PhoneResourceTest {
     public void testDelete200() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/" + p1.getId()).then()
+                .delete("/hobby/delete/" + h1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("code", equalTo("200"));
@@ -202,7 +204,7 @@ public class PhoneResourceTest {
     public void testDelete400() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/0").then()
+                .delete("/hobby/delete/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -211,7 +213,7 @@ public class PhoneResourceTest {
     public void testDelete404() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/99").then()
+                .delete("/hobby/delete/99").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }

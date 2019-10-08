@@ -45,13 +45,15 @@ public class AddressFacade implements IFacade<Address> {
     @Override
     public Address add(Address address) {
         EntityManager em = getEntityManager();
-        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
-        Address a = FacadeManager.getSingleResult(em.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.city.id = :id", Address.class).setParameter("street", address.getStreet()).setParameter("id", address.getCity().getId()));
+        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCityInfo().getZip()).setParameter("city", address.getCityInfo().getCity()));
+        Address a = FacadeManager.getSingleResult(em.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.cityInfo.id = :id", Address.class).setParameter("street", address.getStreet()).setParameter("id", address.getCityInfo().getId()));
         try {
             if (ci == null) {
                 em.getTransaction().begin();
-                em.persist(address.getCity());
+                em.persist(address.getCityInfo());
                 em.getTransaction().commit();
+            } else {
+                address.setCityInfo(ci);
             }
 
             if (a == null) {
@@ -69,13 +71,13 @@ public class AddressFacade implements IFacade<Address> {
     @Override
     public Address edit(Address address) {
         EntityManager em = getEntityManager();
-        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCity().getZip()).setParameter("city", address.getCity().getCity()));
+        CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCityInfo().getZip()).setParameter("city", address.getCityInfo().getCity()));
         try {
             em.getTransaction().begin();
             if(ci == null) {
-                em.persist(address.getCity());
+                em.persist(address.getCityInfo());
             } else {
-                address.setCity(ci);
+                address.setCityInfo(ci);
             }
             em.merge(address);
             em.getTransaction().commit();

@@ -28,7 +28,7 @@ public class HobbyDTO {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.persons = persons;
+        //this.persons = persons;
     }
     
     public HobbyDTO(Hobby hobby) {
@@ -36,9 +36,9 @@ public class HobbyDTO {
         this.name = hobby.getName();
         this.description = hobby.getDescription();
         
-        this.persons = new ArrayList();
-        for(Person p : hobby.getPersons())
-            this.persons.add(new PersonDTO(p));
+//        this.persons = new ArrayList();
+//        for(Person p : hobby.getPersons())
+//            this.persons.add(new PersonDTO(p));
     }
 
     public long getId() {

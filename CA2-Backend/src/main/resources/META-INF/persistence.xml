@@ -8,9 +8,9 @@
     <class>entities.Address</class>
     <class>entities.Phone</class>
     <class>entities.InfoEntity</class>
-    <class>entities.Hobby</class>
-    <class>entities.Person</class>
     <class>entities.Company</class>
+    <class>entities.Person</class>
+    <class>entities.Hobby</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- DO NOT remove the line below. It's not set by the  entityUtils.EMF_Creator -->

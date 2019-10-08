@@ -74,7 +74,7 @@ public class DeleteMeWhenNotNeedAnymore {
         }
         System.out.println(af.getAll());
         Address aTest = af.add(new Address("testNewAddress", new CityInfo("1337", "NonExsistingCity")));
-        aTest.setCity(new CityInfo("133337", "NewCityEdit"));
+        aTest.setCityInfo(new CityInfo("133337", "NewCityEdit"));
         af.edit(aTest);
         af.delete(aTest.getId());
         

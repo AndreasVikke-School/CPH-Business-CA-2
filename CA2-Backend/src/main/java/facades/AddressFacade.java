@@ -52,10 +52,11 @@ public class AddressFacade implements IFacade<Address> {
                 em.getTransaction().begin();
                 em.persist(address.getCityInfo());
                 em.getTransaction().commit();
+            } else {
+                address.setCityInfo(ci);
             }
 
             if (a == null) {
-                address.setCityInfo(ci);
                 a = address;
                 em.getTransaction().begin();
                 em.persist(a);

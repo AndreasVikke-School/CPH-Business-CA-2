@@ -108,6 +108,22 @@ public class HobbyResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Add a hobby",
+            tags = {"Hobby"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = Hobby.class)),
+                        responseCode = "200", description = "Successful Operation"),
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = ExceptionDTO.class)),
+                        responseCode = "400", description = "Invalid input"),
+                @ApiResponse(
+                content = @Content(mediaType = "application/json", 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
+                        responseCode = "404", description = "Hobby not Found")
+            })
     public HobbyDTO addHobby(HobbyDTO DTO) {
         if (DTO == null || DTO.getName() == null || DTO.getDescription() == null
                 || DTO.getName().isEmpty() || DTO.getDescription().isEmpty()) {
@@ -122,6 +138,22 @@ public class HobbyResource {
     @Path("/edit/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Editing a hobby",
+            tags = {"Hobby"},
+            responses = {
+                @ApiResponse(
+                content = @Content(mediaType = "application/json",
+                        schema = @Schema(implementation = Hobby.class)),
+                        responseCode = "200", description = "Operation Successful"),
+                @ApiResponse(
+                content = @Content(mediaType = "application/json",
+                        schema = @Schema(implementation = ExceptionDTO.class)),
+                        responseCode = "400", description = "Invalid input"),
+                @ApiResponse(
+                content = @Content(mediaType = "application/json",
+                        schema = @Schema(implementation = ExceptionDTO.class)),
+                responseCode = "404", description = "Hobby not found")
+            })
     public HobbyDTO editHobby(@PathParam("id") long id, HobbyDTO DTO) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id", 400);
@@ -142,6 +174,22 @@ public class HobbyResource {
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Deleting a Hobby",
+            tags = {"Hobby"},
+            responses = {
+                @ApiResponse(
+                content = @Content(mediaType = "application/json",
+                        schema = @Schema(implementation = Hobby.class)),
+                        responseCode = "200", description = "Operation Successful"),
+                @ApiResponse(
+                content = @Content(mediaType = "application/json", 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
+                        responseCode = "400", description = "Invalid input"),
+                @ApiResponse(
+                content = @Content(mediaType = "application/json", 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
+                        responseCode = "404", description = "Hobby not Found")
+            })
     public Response deleteHobby(@PathParam("id") long id, HobbyDTO DTO) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid ID provided", 400);

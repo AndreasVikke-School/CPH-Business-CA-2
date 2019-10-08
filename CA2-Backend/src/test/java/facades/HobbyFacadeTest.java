@@ -1,8 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package facades;
 
-import utils.EMF_Creator;
-import entities.Address;
-import entities.CityInfo;
+import entities.Hobby;
+import entities.Person;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -11,24 +15,20 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import utils.EMF_Creator.DbSelector;
-import utils.EMF_Creator.Strategy;
+import utils.EMF_Creator;
 
 /**
  *
  * @author William
  */
-//Uncomment the line below, to temporarily disable this test
-//@Disabled
-public class AddressFacadeTest {
-
+public class HobbyFacadeTest {
+    
     private static EntityManagerFactory emf;
-    private static AddressFacade facade;
-    private List<Address> addresses;
+    private static HobbyFacade facade;
+    private List<Hobby> hobbies;
 
-    public AddressFacadeTest() {
+    public HobbyFacadeTest() {
     }
 
     //@BeforeAll
@@ -39,7 +39,7 @@ public class AddressFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = AddressFacade.getAddressFacade(emf);
+        facade = HobbyFacade.getHobbyFacade(emf);
     }
 
     /*   **** HINT **** 
@@ -50,8 +50,8 @@ public class AddressFacadeTest {
      */
     @BeforeAll
     public static void setUpClassV2() {
-        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.DROP_AND_CREATE);
-        facade = AddressFacade.getAddressFacade(emf);
+        emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
+        facade = HobbyFacade.getHobbyFacade(emf);
     }
 
     @AfterAll
@@ -64,25 +64,21 @@ public class AddressFacadeTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        addresses = new ArrayList();
+        hobbies = new ArrayList();
         try {
             em.getTransaction().begin();
 
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
-            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
 
-            CityInfo ci = new CityInfo("2900", "Hellerup");
-            em.persist(ci);
-
-            Address address1 = new Address("Strandvejen", ci);
-            Address address2 = new Address("Hellerupvej", ci);
-            em.persist(address1);
-            em.persist(address2);
+            Hobby hobby = new Hobby("Snorkling", "At dykke");
+            Hobby hobby2 = new Hobby("Løbe", "Træning for benene");
+            em.persist(hobby);
+            em.persist(hobby2);
 
             em.getTransaction().commit();
 
-            addresses.add(address1);
-            addresses.add(address2);
+            hobbies.add(hobby);
+            hobbies.add(hobby2);
         } finally {
             em.close();
         }
@@ -90,13 +86,13 @@ public class AddressFacadeTest {
 
     @Test
     public void testGetById() {
-        Long expected = addresses.get(0).getId();
+        Long expected = hobbies.get(0).getId();
         assertEquals(expected, facade.getById(expected).getId());
     }
 
     @Test
     public void testGetAll() {
-        assertEquals(2, facade.getAll().size(), "Expects two rows in the database");
+        assertEquals(hobbies.size(), facade.getAll().size(), "Expects two rows in the database");
     }
 
     @Test
@@ -104,17 +100,10 @@ public class AddressFacadeTest {
         EntityManager em = emf.createEntityManager();
         int expected;
         int result;
-        CityInfo ci;
         try {
-            em.getTransaction().begin();
-            expected = em.createNamedQuery("Address.findAll").getResultList().size();
-
-            ci = new CityInfo("2900", "Hellerup");
-            em.persist(ci);
-            em.getTransaction().commit();
-
-            facade.add(new Address("Dagmarvej", ci));
-            result = em.createNamedQuery("Address.findAll").getResultList().size();
+            expected = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList().size();
+            facade.add(new Hobby("Cykle", "Det går hurtigt"));
+            result = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList().size();
         } finally {
             em.close();
         }
@@ -123,14 +112,14 @@ public class AddressFacadeTest {
 
     @Test
     public void testEdit() {
-        Address result;
-        String expected = "Nytvejnavn";
+        Hobby result;
+        String expected = "Springgymnastik";
 
-        addresses.get(0).setStreet(expected);
-        facade.edit(addresses.get(0));
-        result = addresses.get(0);
+        hobbies.get(0).setName(expected);
+        facade.edit(hobbies.get(0));
+        result = hobbies.get(0);
 
-        assertEquals(expected, result.getStreet());
+        assertEquals(expected, result.getName());
     }
 
     @Test
@@ -140,13 +129,28 @@ public class AddressFacadeTest {
         int result = 0;
         try {
             em.getTransaction().begin();
-            expected = em.createNamedQuery("Address.findAll").getResultList().size();
-            facade.delete(addresses.get(0).getId());
-            result = em.createNamedQuery("Address.findAll").getResultList().size();
+            expected = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList().size();
+            facade.delete(hobbies.get(0).getId());
+            result = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList().size();
         } finally {
             em.close();
         }
         assertEquals(expected - 1, result);
     }
 
+    @Test
+    public void testGetPersonCountByHobby() {
+        Long id = hobbies.get(0).getId();
+        Long expected = new Long(hobbies.get(0).getPersons().size());
+        Long result = facade.getPersonCountByHobby(id);
+        assertEquals(expected, result);
+    }
+    
+    @Test
+    public void testGetPersonsByHobby() {
+        List<Person> expected = hobbies.get(0).getPersons();
+        List<Person> result = facade.getPersonsByHobby(hobbies.get(0).getId());
+        assertEquals(expected, result);
+    }
+    
 }

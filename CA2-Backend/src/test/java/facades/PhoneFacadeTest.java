@@ -19,7 +19,7 @@ import utils.EMF_Creator;
 
 /**
  *
- * @author APC
+ * @author William
  */
 public class PhoneFacadeTest {
     
@@ -62,11 +62,7 @@ public class PhoneFacadeTest {
         try {
             em.getTransaction().begin();
 
-            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
-            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
             em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Company.deleteAllRows").executeUpdate();
 
             Phone phone = new Phone("12345678", "Home");
             Phone phone2 = new Phone("87654321", "Work");

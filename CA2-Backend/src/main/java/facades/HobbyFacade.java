@@ -47,15 +47,16 @@ public class HobbyFacade implements IFacade<Hobby> {
         Hobby h = FacadeManager.getSingleResult(em.createQuery("SELECT hobby FROM Hobby hobby WHERE hobby.name = :name AND hobby.description = :description", Hobby.class).setParameter("name", hobby.getName()).setParameter("description", hobby.getDescription()));
         if (h == null) {
             try {
-                h = hobby;
                 em.getTransaction().begin();
-                em.persist(h);
+                em.persist(hobby);
                 em.getTransaction().commit();
             } finally {
                 em.close();
             }
+        } else {
+            hobby = h;
         }
-        return h;
+        return hobby;
     }
 
     @Override

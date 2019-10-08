@@ -27,14 +27,14 @@ public class Address implements Serializable {
     private Long id;
     private String street;
     @ManyToOne
-    private CityInfo city;
+    private CityInfo cityInfo;
 
     public Address() {
     }
 
     public Address(String street, CityInfo city) {
         this.street = street;
-        this.city = city;
+        this.cityInfo = city;
     }
     
     public Long getId() {
@@ -53,12 +53,12 @@ public class Address implements Serializable {
         this.street = street;
     }
 
-    public CityInfo getCity() {
-        return city;
+    public CityInfo getCityInfo() {
+        return cityInfo;
     }
 
-    public void setCity(CityInfo city) {
-        this.city = city;
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Address implements Serializable {
         int hash = 7;
         hash = 71 * hash + Objects.hashCode(this.id);
         hash = 71 * hash + Objects.hashCode(this.street);
-        hash = 71 * hash + Objects.hashCode(this.city);
+        hash = 71 * hash + Objects.hashCode(this.cityInfo);
         return hash;
     }
 
@@ -88,7 +88,7 @@ public class Address implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.city, other.city)) {
+        if (!Objects.equals(this.cityInfo, other.cityInfo)) {
             return false;
         }
         return true;
@@ -96,6 +96,6 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "Address{" + "id=" + id + ", street=" + street + ", city=" + city + '}';
+        return "Address{" + "id=" + id + ", street=" + street + ", city=" + cityInfo + '}';
     }
 }

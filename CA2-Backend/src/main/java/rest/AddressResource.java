@@ -153,7 +153,7 @@ public class AddressResource {
         }
 
         a.setStreet(addressDTO.getStreet());
-        a.setCity(new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        a.setCityInfo(new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
         Address address = FACADE.edit(a);
         return new AddressDTO(address);
     }

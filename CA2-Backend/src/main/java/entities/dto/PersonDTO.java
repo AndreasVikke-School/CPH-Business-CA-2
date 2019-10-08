@@ -12,7 +12,7 @@ import java.util.List;
  * @author andreas
  */
 @Schema(name = "Person")
-class PersonDTO extends InfoEntityDTO {
+public class PersonDTO extends InfoEntityDTO {
     @Schema(required = true, example = "Alan")
     private String firsName;
     @Schema(required = true, example = "Petersen")

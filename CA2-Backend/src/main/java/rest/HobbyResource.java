@@ -51,15 +51,7 @@ public class HobbyResource {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = Hobby.class)),
-                        responseCode = "200", description = "Succesfull operation"),
-                @ApiResponse(
-                        content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ExceptionDTO.class)),
-                        responseCode = "400", description = "Invalid input"),
-                @ApiResponse(
-                        content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ExceptionDTO.class)),
-                        responseCode = "404", description = "Hobby not found")
+                        responseCode = "200", description = "Succesfull operation")
 
             })
     public List<HobbyDTO> getAll() {

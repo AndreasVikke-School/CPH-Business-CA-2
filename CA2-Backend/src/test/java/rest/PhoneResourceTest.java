@@ -69,6 +69,7 @@ public class PhoneResourceTest {
         p2 = new Phone("12345679", "Home");
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
             em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.persist(p1);
             em.persist(p2);

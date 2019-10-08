@@ -108,14 +108,12 @@ public class AddressResource {
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "400", description = "Invalid input")}
     )
-    public AddressDTO add(AddressDTO addressDTO) throws WebApplicationException {
-        if (addressDTO == null
-                || addressDTO.getStreet() == null || addressDTO.getCityInfo()== null
-                || addressDTO.getStreet().isEmpty()) {
+    public AddressDTO add(AddressDTO addressdto) throws WebApplicationException {
+        if (!validateAddressDTO(addressdto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
-        Address address = new Address(addressDTO.getStreet(), new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        Address address = new Address(addressdto.getStreet(), new CityInfo(addressdto.getCityInfo().getZip(), addressdto.getCityInfo().getCity()));
         AddressDTO dto = new AddressDTO(FACADE.add(address));
         return dto;
     }
@@ -138,12 +136,8 @@ public class AddressResource {
                         schema = @Schema(implementation = ExceptionDTO.class)), 
                         responseCode = "404", description = "Address not found")}
     )
-    public AddressDTO edit(@PathParam("id") long id, AddressDTO addressDTO) {
-        if (id <= 0 || addressDTO == null
-                || addressDTO.getStreet() == null || addressDTO.getCityInfo() == null
-                || addressDTO.getCityInfo().getZip() == null || addressDTO.getCityInfo().getCity() == null
-                || addressDTO.getCityInfo().getZip().isEmpty() || addressDTO.getCityInfo().getCity().isEmpty()
-                || addressDTO.getStreet().isEmpty()) {
+    public AddressDTO edit(@PathParam("id") long id, AddressDTO addressdto) {
+        if (id <= 0 || !validateAddressDTO(addressdto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
 
@@ -152,8 +146,8 @@ public class AddressResource {
             throw new WebApplicationException("Address not found", 404);
         }
 
-        a.setStreet(addressDTO.getStreet());
-        a.setCity(new CityInfo(addressDTO.getCityInfo().getZip(), addressDTO.getCityInfo().getCity()));
+        a.setStreet(addressdto.getStreet());
+        a.setCity(new CityInfo(addressdto.getCityInfo().getZip(), addressdto.getCityInfo().getCity()));
         Address address = FACADE.edit(a);
         return new AddressDTO(address);
     }
@@ -189,5 +183,16 @@ public class AddressResource {
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Address with id: " + address.getId() + " deleted successfully.\"}")
                 .type(MediaType.APPLICATION_JSON).build();
+    }
+    
+    private boolean validateAddressDTO(AddressDTO addressdto) {
+        if (addressdto == null
+                || addressdto.getStreet() == null || addressdto.getCityInfo() == null
+                || addressdto.getCityInfo().getZip() == null || addressdto.getCityInfo().getCity() == null
+                || addressdto.getCityInfo().getZip().isEmpty() || addressdto.getCityInfo().getCity().isEmpty()
+                || addressdto.getStreet().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

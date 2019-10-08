@@ -18,6 +18,12 @@ window.onload = () => {
 
     var cmpyListBtn = document.getElementById("cmpyListBtn");
     cmpyListBtn.addEventListener("click", getCompanyList);
+
+    var hobbyButton = document.getElementById("hobbyBtnCol");
+    hobbyButton.addEventListener("click", addHobbyColoumn);
+
+    var phoneButton = document.getElementById("phoneBtn");
+    phoneButton.addEventListener("click", addPhoneColoumn);
 }
 
 
@@ -147,4 +153,97 @@ function getFetchData4(amount) {
             document.getElementById("output").innerHTML = "";
             document.getElementById("output").appendChild(createTable(data)); //needs a better method
         })
+}
+
+
+var hobbyCounter = 0;
+//Adding Coloumns to the Modal
+//Hobby Coloumn
+function addHobbyColoumn() {
+    hobbyCounter--;
+    var outerDiv = document.createElement("div");
+    outerDiv.setAttribute('class','row d-flex justify-content-center');
+    outerDiv.setAttribute('id', 'outerDiv'+hobbyCounter);
+
+    var innerDivCol1 = document.createElement("div");
+    innerDivCol1.setAttribute('class','col-sm');
+    var input1 = document.createElement("input");
+    input1.setAttribute('type','text');
+    input1.setAttribute('class','form-control');
+    input1.setAttribute('id','recipient-name');
+    input1.setAttribute('placeholder','Name');
+    innerDivCol1.appendChild(input1);
+
+    var innerDivCol2 = document.createElement("div");
+    innerDivCol2.setAttribute('class','col-sm');
+    var input2 = document.createElement("input");
+    input2.setAttribute('type','text');
+    input2.setAttribute('class','form-control');
+    input2.setAttribute('id','recipient-name');
+    input2.setAttribute('placeholder','Description');
+    innerDivCol2.appendChild(input2);
+
+    var innerDivCol3 = document.createElement("div");
+    innerDivCol3.setAttribute('class','col-sm');
+    var deleteButton = document.createElement('button');
+    deleteButton.setAttribute('class', 'btn btn-danger');
+    deleteButton.setAttribute("id", hobbyCounter);
+    deleteButton.addEventListener("click", deleteColoumn);
+    deleteButton.innerHTML = "Delete";
+    innerDivCol3.appendChild(deleteButton);
+
+    outerDiv.appendChild(innerDivCol1);
+    outerDiv.appendChild(innerDivCol2);
+    outerDiv.appendChild(innerDivCol3);
+
+    document.getElementById("hobbyColoumn").appendChild(outerDiv);
+}
+
+
+var phoneCounter = 0;
+//Adding Coloumns to the Modal
+//Phone Coloumn
+function addPhoneColoumn() {
+    phoneCounter++;
+    var outerDiv = document.createElement("div");
+    outerDiv.setAttribute('class','row d-flex justify-content-center');
+    outerDiv.setAttribute('id', 'outerDiv'+phoneCounter);
+
+    var innerDivCol1 = document.createElement("div");
+    innerDivCol1.setAttribute('class','col-sm');
+    var input1 = document.createElement("input");
+    input1.setAttribute('type','text');
+    input1.setAttribute('class','form-control');
+    input1.setAttribute('id','recipient-name');
+    input1.setAttribute('placeholder','Number');
+    innerDivCol1.appendChild(input1);
+
+    var innerDivCol2 = document.createElement("div");
+    innerDivCol2.setAttribute('class','col-sm');
+    var input2 = document.createElement("input");
+    input2.setAttribute('type','text');
+    input2.setAttribute('class','form-control');
+    input2.setAttribute('id','recipient-name');
+    input2.setAttribute('placeholder','Description');
+    innerDivCol2.appendChild(input2);
+
+    var innerDivCol3 = document.createElement("div");
+    innerDivCol3.setAttribute('class','col-sm');
+    var deleteButton = document.createElement('button');
+    deleteButton.setAttribute('class', 'btn btn-danger');
+    deleteButton.setAttribute("id", phoneCounter);
+    deleteButton.addEventListener("click", deleteColoumn);
+    deleteButton.innerHTML = "Delete";
+    innerDivCol3.appendChild(deleteButton);
+
+    outerDiv.appendChild(innerDivCol1);
+    outerDiv.appendChild(innerDivCol2);
+    outerDiv.appendChild(innerDivCol3);
+
+    document.getElementById("phoneColoumn").appendChild(outerDiv);
+}
+
+
+function deleteColoumn(e) {
+    document.getElementById('outerDiv'+e.target.id).outerHTML = "";
 }

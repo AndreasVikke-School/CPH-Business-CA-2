@@ -3,7 +3,6 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.Hobby;
-import entities.Phone;
 import entities.dto.HobbyDTO;
 import errorhandling.dto.ExceptionDTO;
 import facades.HobbyFacade;
@@ -47,7 +46,7 @@ public class HobbyResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all hobbies",
-            tags = {"Hobby"},
+            tags = {"hobby"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -77,7 +76,7 @@ public class HobbyResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get a single hobby from an id",
-            tags = {"Hobby"},
+            tags = {"hobby"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -97,11 +96,11 @@ public class HobbyResource {
             throw new WebApplicationException("Invalid id", 400);
         }
 
-        HobbyDTO dto = new HobbyDTO(FACADE.getById(id));
-        if (dto == null) {
+        Hobby hobby = FACADE.getById(id);
+        if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);
         }
-        return dto;
+        return new HobbyDTO(hobby);
     }
 
     @POST
@@ -109,7 +108,7 @@ public class HobbyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Add a hobby",
-            tags = {"Hobby"},
+            tags = {"hobby"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -124,12 +123,11 @@ public class HobbyResource {
                         schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Hobby not Found")
             })
-    public HobbyDTO addHobby(HobbyDTO DTO) {
-        if (DTO == null || DTO.getName() == null || DTO.getDescription() == null
-                || DTO.getName().isEmpty() || DTO.getDescription().isEmpty()) {
+    public HobbyDTO addHobby(HobbyDTO hobbydto) {
+        if (!validateHobbyDTO(hobbydto)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
-        Hobby hobby = new Hobby(DTO.getName(), DTO.getDescription());
+        Hobby hobby = new Hobby(hobbydto.getName(), hobbydto.getDescription());
         HobbyDTO dto = new HobbyDTO(FACADE.add(hobby));
         return dto;
     }
@@ -139,7 +137,7 @@ public class HobbyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Editing a hobby",
-            tags = {"Hobby"},
+            tags = {"hobby"},
             responses = {
                 @ApiResponse(
                 content = @Content(mediaType = "application/json",
@@ -154,8 +152,8 @@ public class HobbyResource {
                         schema = @Schema(implementation = ExceptionDTO.class)),
                 responseCode = "404", description = "Hobby not found")
             })
-    public HobbyDTO editHobby(@PathParam("id") long id, HobbyDTO DTO) {
-        if (id <= 0) {
+    public HobbyDTO editHobby(@PathParam("id") long id, HobbyDTO hobbydto) {
+        if (id <= 0 || !validateHobbyDTO(hobbydto)) {
             throw new WebApplicationException("Invalid Id", 400);
         }
 
@@ -164,8 +162,8 @@ public class HobbyResource {
             throw new WebApplicationException("Hobby not found", 404);
         }
 
-        hobby.setName(DTO.getName());
-        hobby.setDescription(DTO.getDescription());
+        hobby.setName(hobbydto.getName());
+        hobby.setDescription(hobbydto.getDescription());
         HobbyDTO dto = new HobbyDTO(FACADE.edit(hobby));
         return dto;
     }
@@ -175,7 +173,7 @@ public class HobbyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Deleting a Hobby",
-            tags = {"Hobby"},
+            tags = {"hobby"},
             responses = {
                 @ApiResponse(
                 content = @Content(mediaType = "application/json",
@@ -190,7 +188,7 @@ public class HobbyResource {
                         schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Hobby not Found")
             })
-    public Response deleteHobby(@PathParam("id") long id, HobbyDTO DTO) {
+    public Response deleteHobby(@PathParam("id") long id) {
         if (id <= 0) {
             throw new WebApplicationException("Invalid ID provided", 400);
         }
@@ -204,5 +202,13 @@ public class HobbyResource {
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Hobby with id: " + hobby.getId()
                         + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
+    }
+    
+    private boolean validateHobbyDTO(HobbyDTO hobbydto) {
+        if(hobbydto == null || hobbydto.getName() == null || hobbydto.getDescription() == null
+                || hobbydto.getName().isEmpty() || hobbydto.getDescription().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

@@ -46,26 +46,27 @@ public class AddressFacade implements IFacade<Address> {
     public Address add(Address address) {
         EntityManager em = getEntityManager();
         CityInfo ci = FacadeManager.getSingleResult(em.createNamedQuery("CityInfo.getByZipCity", CityInfo.class).setParameter("zip", address.getCityInfo().getZip()).setParameter("city", address.getCityInfo().getCity()));
-        Address a = FacadeManager.getSingleResult(em.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.cityInfo.id = :id", Address.class).setParameter("street", address.getStreet()).setParameter("id", address.getCityInfo().getId()));
         try {
             if (ci == null) {
                 em.getTransaction().begin();
                 em.persist(address.getCityInfo());
+                em.persist(address);
                 em.getTransaction().commit();
             } else {
+                Address a = FacadeManager.getSingleResult(em.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.cityInfo.id = :id", Address.class).setParameter("street", address.getStreet()).setParameter("id", ci.getId()));
                 address.setCityInfo(ci);
-            }
-
-            if (a == null) {
-                a = address;
-                em.getTransaction().begin();
-                em.persist(a);
-                em.getTransaction().commit();
+                if (a == null) {
+                    em.getTransaction().begin();
+                    em.persist(address);
+                    em.getTransaction().commit();
+                } else {
+                    address = a;
+                }
             }
         } finally {
             em.close();
         }
-        return a;
+        return address;
     }
 
     @Override

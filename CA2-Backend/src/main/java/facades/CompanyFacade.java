@@ -44,15 +44,15 @@ public class CompanyFacade implements IFacade<Company> {
     public Company add(Company company) {
         EntityManager em = getEntityManager();
         Company c = FacadeManager.getSingleResult(em.createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr AND company.name = :name", Company.class).setParameter("cvr", company.getCvr()).setParameter("name", company.getName()));
-        if (c == null) {
-            try {
+        try {
+            if (c == null) {
                 c = company;
                 em.getTransaction().begin();
                 em.persist(c);
                 em.getTransaction().commit();
-            } finally {
-                em.close();
             }
+        } finally {
+            em.close();
         }
         return c;
     }

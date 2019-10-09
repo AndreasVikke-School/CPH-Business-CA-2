@@ -12,13 +12,13 @@ import java.util.List;
  * @author andreas
  */
 @Schema(name = "Person")
-class PersonDTO extends InfoEntityDTO {
+public class PersonDTO extends InfoEntityDTO {
     @Schema(required = true, example = "Alan")
     private String firsName;
     @Schema(required = true, example = "Petersen")
     private String lastName;
     private List<HobbyDTO> hobbies;
-
+    
     public PersonDTO(String firsName, String lastName, List<HobbyDTO> hobbies, InfoEntity infoEntity) {
         super(infoEntity);
         this.firsName = firsName;

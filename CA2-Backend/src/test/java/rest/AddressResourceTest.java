@@ -1,7 +1,9 @@
 package rest;
 
-import entities.Phone;
-import entities.dto.PhoneDTO;
+import entities.Address;
+import entities.CityInfo;
+import entities.dto.AddressDTO;
+import entities.dto.CityInfoDTO;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -18,17 +20,18 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 //Uncomment the line below, to temporarily disable this test
-//@Disabled
-public class PhoneResourceTest {
+@Disabled
+public class AddressResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Phone p1, p2;
+    private static Address a1, a2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -65,14 +68,16 @@ public class PhoneResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        p1 = new Phone("12345678", "Mobile");
-        p2 = new Phone("12345679", "Home");
+        CityInfo ci = new CityInfo("1234", "Lyngby");
+        a1 = new Address("Streetname 1", ci);
+        a2 = new Address("Streetname 2", ci);
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
-            em.persist(p1);
-            em.persist(p2);
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
+            em.persist(ci);
+            em.persist(a1);
+            em.persist(a2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -83,17 +88,17 @@ public class PhoneResourceTest {
     public void testGetById200() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/" + p1.getId()).then()
+                .get("/address/" + a1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo(p1.getNumber()));
+                .body("street", equalTo(a1.getStreet()));
     }
 
     @Test
     public void testGetById400() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/0").then()
+                .get("/address/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -102,7 +107,7 @@ public class PhoneResourceTest {
     public void testGetById404() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/9").then()
+                .get("/address/9").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
@@ -111,7 +116,7 @@ public class PhoneResourceTest {
     public void testGetAll200() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/phone/all").then()
+                .get("/address/all").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("size()", equalTo(2));
@@ -121,25 +126,26 @@ public class PhoneResourceTest {
     public void testAdd200() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Phone"))
-                .post("/phone/add").then()
+                .body(new AddressDTO(0, "Streetname 3", new CityInfoDTO(0, "4321", "Nærum")))
+                .post("/address/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo("12345677"));
+                .body("street", equalTo("Streetname 3"));
     }
     
     @Test
     public void testAdd400() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "", "Test Phone"))
-                .post("/phone/add").then()
+                .body(new AddressDTO(0, "", new CityInfoDTO(0, "4321", "Nærum")))
+                .post("/address/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
+        
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", null))
-                .post("/phone/add").then()
+                .body(new AddressDTO(0, "12345677", new CityInfoDTO(0, "4321", null)))
+                .post("/address/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -148,33 +154,33 @@ public class PhoneResourceTest {
     public void testEdit200() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new AddressDTO(0, "Streetname 3", new CityInfoDTO(0, "4321", "Nærum")))
+                .put("/address/edit/" + a1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("number", equalTo("12345677"));
+                .body("street", equalTo("Streetname 3"));
     }
     
     @Test
     public void testEdit400() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/0").then()
+                .body(new AddressDTO(0, "Streetname 3", new CityInfoDTO(0, "4321", "Nærum")))
+                .put("/address/edit/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
         
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", ""))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new AddressDTO(0, "", new CityInfoDTO(0, "4321", "Nærum")))
+                .put("/address/edit/" + a1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
-        
+
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, null, "Test Edit"))
-                .put("/phone/edit/" + p1.getId()).then()
+                .body(new AddressDTO(0, "Streetname 3", new CityInfoDTO(0, null, "Nærum")))
+                .put("/address/edit/" + a1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -183,8 +189,8 @@ public class PhoneResourceTest {
     public void testEdit404() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PhoneDTO(0, "12345677", "Test Edit"))
-                .put("/phone/edit/99").then()
+                .body(new AddressDTO(0, "Streetname 3", new CityInfoDTO(0, "4321", "Nærum")))
+                .put("/address/edit/99").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
@@ -193,7 +199,7 @@ public class PhoneResourceTest {
     public void testDelete200() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/" + p1.getId()).then()
+                .delete("/address/delete/" + a1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("code", equalTo("200"));
@@ -203,7 +209,7 @@ public class PhoneResourceTest {
     public void testDelete400() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/0").then()
+                .delete("/address/delete/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -212,7 +218,7 @@ public class PhoneResourceTest {
     public void testDelete404() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/phone/delete/99").then()
+                .delete("/address/delete/99").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }

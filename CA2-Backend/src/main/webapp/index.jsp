@@ -10,13 +10,15 @@
     <h1>Links:</h1>
     <ul>
         <li>
-            <a href="apidocumentation/">API Documentation</a>
-        </li>
-        <li>
-            <a href="openapi/">OpenAPI</a>
+            <a href="openapi/">Swagger OpenAPI</a>
         </li>
         <li>
             <a href="scrum.jsp">SCRUM Plan</a>
+        </li>
+        
+        
+        <li>
+            <a href="apidocumentation/">Swagger Manuel Documentation</a>
         </li>
     </ul>
 </div>

@@ -298,16 +298,16 @@ public class PersonResource {
         return dto;
     }
 
-    private boolean validatePersonDTO(PersonDTO phonedto) {
-        if (phonedto.getPhones() == null || phonedto.getPhones().isEmpty()
-                || phonedto.getAddress() == null
-                || phonedto.getAddress().getStreet() == null || phonedto.getAddress().getStreet().isEmpty()
-                || phonedto.getAddress().getCityInfo().getCity() == null || phonedto.getAddress().getCityInfo().getCity().isEmpty()
-                || phonedto.getAddress().getCityInfo().getZip() == null || phonedto.getAddress().getCityInfo().getZip().isEmpty()
-                || phonedto.getEmail() == null || phonedto.getEmail().isEmpty()
-                || phonedto.getHobbies() == null || phonedto.getHobbies().isEmpty()
-                || phonedto.getFirsName() == null || phonedto.getFirsName().isEmpty()
-                || phonedto.getLastName() == null || phonedto.getLastName().isEmpty()) {
+    private boolean validatePersonDTO(PersonDTO persondto) {
+        if (persondto.getPhones() == null
+                || persondto.getAddress() == null
+                || persondto.getAddress().getStreet() == null || persondto.getAddress().getStreet().isEmpty()
+                || persondto.getAddress().getCityInfo().getCity() == null || persondto.getAddress().getCityInfo().getCity().isEmpty()
+                || persondto.getAddress().getCityInfo().getZip() == null || persondto.getAddress().getCityInfo().getZip().isEmpty()
+                || persondto.getEmail() == null || persondto.getEmail().isEmpty()
+                || persondto.getHobbies() == null
+                || persondto.getFirsName() == null || persondto.getFirsName().isEmpty()
+                || persondto.getLastName() == null || persondto.getLastName().isEmpty()) {
             return false;
         }
         return true;

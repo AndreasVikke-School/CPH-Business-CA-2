@@ -31,6 +31,10 @@ public class CityInfoDTO {
     public CityInfoDTO() {
     }
 
+    public CityInfoDTO(String string, String viby_J) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public long getId() {
         return id;
     }

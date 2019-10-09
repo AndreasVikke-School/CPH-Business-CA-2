@@ -15,11 +15,6 @@
         <li>
             <a href="scrum.jsp">SCRUM Plan</a>
         </li>
-        
-        
-        <li>
-            <a href="apidocumentation/">Swagger Manuel Documentation</a>
-        </li>
     </ul>
 </div>
 

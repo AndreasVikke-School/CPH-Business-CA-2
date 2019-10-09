@@ -1,7 +1,6 @@
 package entities.dto;
 
 import entities.Hobby;
-import entities.InfoEntity;
 import entities.Person;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -19,8 +18,8 @@ public class PersonDTO extends InfoEntityDTO {
     private String lastName;
     private List<HobbyDTO> hobbies;
     
-    public PersonDTO(String firsName, String lastName, List<HobbyDTO> hobbies, InfoEntity infoEntity) {
-        super(infoEntity);
+    public PersonDTO(String firsName, String lastName, List<HobbyDTO> hobbies, InfoEntityDTO infoEntitydto) {
+        super(infoEntitydto.getId(), infoEntitydto.getEmail(), infoEntitydto.getPhones(), infoEntitydto.getAddress());
         this.firsName = firsName;
         this.lastName = lastName;
         this.hobbies = hobbies;

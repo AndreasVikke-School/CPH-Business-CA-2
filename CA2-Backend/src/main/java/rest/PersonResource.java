@@ -149,7 +149,7 @@ public class PersonResource {
                 || obj.getAddress().getCityInfo().getZip() == null) {
             throw new WebApplicationException("Invalid Input", 400);
         }
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(),
                 obj.getAddress().getCityInfo().getCity());
 
         Address address = new Address(obj.getAddress().getStreet(),

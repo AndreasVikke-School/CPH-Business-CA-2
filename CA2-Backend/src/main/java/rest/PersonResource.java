@@ -63,7 +63,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation")
             })
     public List<PersonDTO> getAll() {
@@ -83,7 +83,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -117,7 +117,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -194,7 +194,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -282,7 +282,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -307,6 +307,19 @@ public class PersonResource {
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Person with id: " + p.getId()
                         + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
+    }
+    
+    
+    @GET
+    @Path("/findByZip/{zip}")
+    @Produces(MediaType.APPLICATION_JSON)   
+    public List<PersonDTO> getByZip(@PathParam("zip") String zip) {
+        List<Person> pers = FACADE.getPersonsByCity(zip);
+        List<PersonDTO> dto = new ArrayList();
+        for (Person person : pers) {
+            dto.add(new PersonDTO(person));
+        }
+        return dto;
     }
 
 }

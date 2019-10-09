@@ -21,7 +21,7 @@ import utils.EMF_Creator.Strategy;
  * @author William
  */
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+
 public class AddressFacadeTest {
 
     private static EntityManagerFactory emf;

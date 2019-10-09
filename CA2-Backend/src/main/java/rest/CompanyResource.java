@@ -52,7 +52,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Company.class)),
+                                schema = @Schema(implementation = CompanyDTO.class)),
                         responseCode = "200", description = "Succesfull operation")
 
             })
@@ -72,7 +72,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Company.class)),
+                                schema = @Schema(implementation = CompanyDTO.class)),
                         responseCode = "200", description = "Successful operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -106,7 +106,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Company.class)),
+                                schema = @Schema(implementation = CompanyDTO.class)),
                         responseCode = "200", description = "Successful operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -151,7 +151,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Company.class)),
+                                schema = @Schema(implementation = CompanyDTO.class)),
                         responseCode = "200", description = "Successful operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -204,7 +204,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Company.class)),
+                                schema = @Schema(implementation = CompanyDTO.class)),
                         responseCode = "200", description = "Successful operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",

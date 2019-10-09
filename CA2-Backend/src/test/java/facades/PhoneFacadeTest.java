@@ -22,7 +22,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
-@Disabled
+//@Disabled
 public class PhoneFacadeTest {
     
     private static EntityManagerFactory emf;
@@ -63,7 +63,7 @@ public class PhoneFacadeTest {
         phones = new ArrayList();
         try {
             em.getTransaction().begin();
-
+            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
             em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
 
             Phone phone = new Phone("12345678", "Home");

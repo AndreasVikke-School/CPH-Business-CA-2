@@ -26,7 +26,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
-@Disabled
+//@Disabled
 public class CompanyFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -80,12 +80,14 @@ public class CompanyFacadeTest {
             em.createNamedQuery("Company.deleteAllRows").executeUpdate();
             
             Phone phone = new Phone("22155812", "Boss");
-            Phone phone2 = new Phone("89756410", "Home");
             em.persist(phone);
+            Phone phone2 = new Phone("89756410", "Home");
             em.persist(phone2);
+            
             List<Phone> phones = new ArrayList();
             phones.add(phone);
-            phones.add(phone2);
+            List<Phone> phones2 = new ArrayList();
+            phones2.add(phone2);
             
             CityInfo ci = new CityInfo("0001", "Olympen");
             em.persist(ci);
@@ -96,10 +98,13 @@ public class CompanyFacadeTest {
             InfoEntity ie = new InfoEntity("william@erok.dk", phones, address);
             em.persist(ie);
             
+            InfoEntity ie2 = new InfoEntity("william@erok.dk", phones2, address);
+            em.persist(ie2);
+            
             Company company = new Company("Himmelriget", "Making sure you don't get to heaven", "00000", 1, 80085, ie);
             em.persist(company);
             
-            Company company2 = new Company("Bilka", "Hvem ka'", "09234500", 8000, 8000000, ie);
+            Company company2 = new Company("Bilka", "Hvem ka'", "09234500", 8000, 8000000, ie2);
             em.persist(company2);
             
             em.getTransaction().commit();
@@ -185,7 +190,7 @@ public class CompanyFacadeTest {
         assertEquals(expected - 1, result);
     }
     
-    @Disabled //Disabled because it returns more than one result 
+    //@Disabled 
     @Test
     public void testGetByPhone() throws Throwable {
         String num = companies.get(0).getPhones().get(0).getNumber();

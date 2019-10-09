@@ -25,7 +25,7 @@ import utils.EMF_Creator.Strategy;
  * @author William
  */
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -72,20 +72,21 @@ public class PersonFacadeTest {
         try {
             em.getTransaction().begin();
 
-            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
-            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
 
             Phone p1 = new Phone("22883099", "Phone description");
             em.persist(p1);
             Phone p2 = new Phone("22759304", "Phone description 2 - The Redemption");
             em.persist(p2);
             List<Phone> phones = new ArrayList();
+            List<Phone> phones2 = new ArrayList();
             phones.add(p1);
-            phones.add(p2);
+            phones2.add(p2);
 
             CityInfo ci = new CityInfo("2900", "Hellerup");
             em.persist(ci);
@@ -94,7 +95,9 @@ public class PersonFacadeTest {
             em.persist(a);
 
             InfoEntity ie = new InfoEntity("Email@email.com", phones, a);
+            InfoEntity ie2 = new InfoEntity("Email@email.com", phones2, a);
             em.persist(ie);
+            em.persist(ie2);
 
             Hobby hobby1 = new Hobby("Revolutionist", "I like to start revoultions");
             em.persist(hobby1);
@@ -106,7 +109,7 @@ public class PersonFacadeTest {
 
             Person person = new Person("Emil", "Svens", hobbies, ie);
             em.persist(person);
-            Person person2 = new Person("Be", "Svens", hobbies, ie);
+            Person person2 = new Person("Be", "Svens", hobbies, ie2);
             em.persist(person2);
 
             people.add(person);
@@ -124,7 +127,6 @@ public class PersonFacadeTest {
         assertEquals(expected, facade.getById(expected).getId());
     }
 
-    @Disabled
     @Test
     public void testGetAll() {
         assertEquals(2, facade.getAll().size(), "Expects two rows in the database");
@@ -137,7 +139,7 @@ public class PersonFacadeTest {
         int result = 0;
         try {
             em.getTransaction().begin();
-            expected += em.createNamedQuery("Person.findAll").getResultList().size();
+            expected += em.createQuery("SELECT p FROM Person p", Phone.class).getResultList().size();
 
             List<Hobby> hobbies = new ArrayList();
             Hobby hobby = new Hobby("Hiking", "Not fun");
@@ -160,7 +162,7 @@ public class PersonFacadeTest {
             em.getTransaction().commit();
 
             facade.add(new Person("William", "Test", hobbies, ie));
-            result = em.createNamedQuery("Person.findAll").getResultList().size();
+            result = em.createQuery("SELECT p FROM Person p", Phone.class).getResultList().size();
         } finally {
             em.close();
         }
@@ -186,15 +188,16 @@ public class PersonFacadeTest {
         int result = 0;
         try {
             em.getTransaction().begin();
-            expected = em.createNamedQuery("Person.findAll").getResultList().size();
+            expected = em.createQuery("SELECT p FROM Person p", Phone.class).getResultList().size();
             facade.delete(people.get(0).getId());
-            result = em.createNamedQuery("Person.findAll").getResultList().size();
+            result = em.createQuery("SELECT p FROM Person p", Phone.class).getResultList().size();
         } finally {
             em.close();
         }
         assertEquals(expected - 1, result);
     }
 
+    //@Disabled
     @Test
     public void testGetByPhone() {
         String num = people.get(0).getPhones().get(0).getNumber();
@@ -208,7 +211,8 @@ public class PersonFacadeTest {
     @Disabled
     @Test
     public void testGetPersonsByCity() {
-        // Jeg er i tvivl om denne
+        
+        assertEquals(people, facade.getPersonsByCity("Hellerup"));
         
     }
 }

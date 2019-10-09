@@ -4,6 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 window.onload = () => {
     document.getElementById("output").append(createTable([{ "firstname": "Andreas", "lastname": "Vikke" },
     { "firstname": "Emil", "lastname": "Svensmark" }]));
+
+    loadHobbyOptions1();
+    loadHobbyOptions2();
+    loadCityOptions();
+
     var btnHobby = document.getElementById("hobbyBtn");
     btnHobby.addEventListener("click", getHobby);
 
@@ -30,16 +35,16 @@ window.onload = () => {
 //Hobby Button
 //Sets .output to a table with all persons with a hobby
 function getHobby() {
-    var hobby = document.getElementById("inputGroupSelect01").value;
-    getFetchData1(hobby);
+    var hobbyid = document.getElementById("inputGroupHobby1").value;
+    getFetchData1(hobbyid);
 }
 
-function getFetchData1(hobby) {
-    fetch("/CA2/api/Hobbies/" + hobby) //Need correct API when its made.
+function getFetchData1(hobbyid) {
+    fetch("http://localhost:8080/ca2/api/person/all") //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data));
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -47,16 +52,16 @@ function getFetchData1(hobby) {
 //City Button
 //Sets .output to a table with all persons from a city
 function getCity() {
-    var city = document.getElementById("inputGroupSelect02").value;
-    getFetchData2(city);
+    var zip = document.getElementById("inputGroupCity1").value;
+    getFetchData2(zip);
 }
 
-function getFetchData2(city) {
-    fetch("/CA2/api/Cities/" + city) //Need correct API when its made.
+function getFetchData2(zip) {
+    fetch("http://localhost:8080/ca2/api/person/findByZip/" + zip)
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data));
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -64,16 +69,16 @@ function getFetchData2(city) {
 //Hobby Count Button
 //Sets .output to a number equal to the amount of people from a city
 function getHobbyCount() {
-    var hobby = document.getElementById("inputGroupSelect03").value;
+    var hobby = document.getElementById("inputGroupHobby2").value;
     getFetchData3(hobby);
 }
 
-function getFetchData3(hobby) {
-    fetch("/CA2/api/hobby/count/" + hobby) //Need correct API when its made.
+function getFetchData3(hobbyid) {
+    fetch("http://localhost:8080/ca2/api/hobby/personCount/" + hobbyid)
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data)); //needs a better method
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -96,15 +101,66 @@ function getZipcodes() {
                 zipcodes.push(obj);
             }
             document.getElementById("output").innerHTML = "<div id=\"output2\" class=\"table-wrapper-scroll-y my-custom-scrollbar\"></div >";
-            document.getElementById("output2").appendChild(createTable(zipcodes));
+            document.getElementById("output2").append(createTable(zipcodes));
         })
 }
+
+
+//Sets the Options of hobbies to available hobbies
+//from end point all hobbies.
+function loadHobbyOptions1() {
+    fetch("http://localhost:8080/ca2/api/hobby/all")
+        .then(res => res.json())
+        .then(data => {
+            for (var i in data) {
+                var option = document.createElement('option');
+                option.setAttribute('value', data[i].id);
+                option.innerHTML = data[i].name;
+                document.getElementById("inputGroupHobby1").appendChild(option);
+            }
+        })
+}
+
+//Sets the Options of hobbies to available hobbies
+//from end point all hobbies.
+function loadHobbyOptions2() {
+    fetch("http://localhost:8080/ca2/api/hobby/all")
+        .then(res => res.json())
+        .then(data => {
+            for (var i in data) {
+                var option = document.createElement('option');
+                option.setAttribute('value', data[i].id);
+                option.innerHTML = data[i].name;
+                document.getElementById("inputGroupHobby2").appendChild(option);
+            }
+        })
+}
+
+
+//Sets the Options of citites to available cities
+//might need another endpoint.
+function loadCityOptions() {
+    fetch("https://dawa.aws.dk/postnumre")
+        .then(res => res.json())
+        .then(data => {
+            for (var i in data) {
+                var option = document.createElement('option');
+                option.setAttribute('value', data[i].id);
+                option.innerHTML = data[i].navn;
+                document.getElementById("inputGroupCity1").appendChild(option);
+            }
+        })
+}
+
 
 
 //Automatic Table Generator
 function createTable(array) {
     if (!Array.isArray(array)) {
         array = [array];
+    }
+    if (array.length <= 0) {
+        return document.createElement("p").innerHTML = "No persons found ..";
     }
 
     var table = document.createElement("table");
@@ -162,29 +218,29 @@ var hobbyCounter = 0;
 function addHobbyColoumn() {
     hobbyCounter--;
     var outerDiv = document.createElement("div");
-    outerDiv.setAttribute('class','row d-flex justify-content-center');
-    outerDiv.setAttribute('id', 'outerDiv'+hobbyCounter);
+    outerDiv.setAttribute('class', 'row d-flex justify-content-center');
+    outerDiv.setAttribute('id', 'outerDiv' + hobbyCounter);
 
     var innerDivCol1 = document.createElement("div");
-    innerDivCol1.setAttribute('class','col-sm');
+    innerDivCol1.setAttribute('class', 'col-sm');
     var input1 = document.createElement("input");
-    input1.setAttribute('type','text');
-    input1.setAttribute('class','form-control');
-    input1.setAttribute('id','recipient-name');
-    input1.setAttribute('placeholder','Name');
+    input1.setAttribute('type', 'text');
+    input1.setAttribute('class', 'form-control');
+    input1.setAttribute('id', 'recipient-name');
+    input1.setAttribute('placeholder', 'Name');
     innerDivCol1.appendChild(input1);
 
     var innerDivCol2 = document.createElement("div");
-    innerDivCol2.setAttribute('class','col-sm');
+    innerDivCol2.setAttribute('class', 'col-sm');
     var input2 = document.createElement("input");
-    input2.setAttribute('type','text');
-    input2.setAttribute('class','form-control');
-    input2.setAttribute('id','recipient-name');
-    input2.setAttribute('placeholder','Description');
+    input2.setAttribute('type', 'text');
+    input2.setAttribute('class', 'form-control');
+    input2.setAttribute('id', 'recipient-name');
+    input2.setAttribute('placeholder', 'Description');
     innerDivCol2.appendChild(input2);
 
     var innerDivCol3 = document.createElement("div");
-    innerDivCol3.setAttribute('class','col-sm');
+    innerDivCol3.setAttribute('class', 'col-sm');
     var deleteButton = document.createElement('button');
     deleteButton.setAttribute('class', 'btn btn-danger');
     deleteButton.setAttribute("id", hobbyCounter);
@@ -206,29 +262,29 @@ var phoneCounter = 0;
 function addPhoneColoumn() {
     phoneCounter++;
     var outerDiv = document.createElement("div");
-    outerDiv.setAttribute('class','row d-flex justify-content-center');
-    outerDiv.setAttribute('id', 'outerDiv'+phoneCounter);
+    outerDiv.setAttribute('class', 'row d-flex justify-content-center');
+    outerDiv.setAttribute('id', 'outerDiv' + phoneCounter);
 
     var innerDivCol1 = document.createElement("div");
-    innerDivCol1.setAttribute('class','col-sm');
+    innerDivCol1.setAttribute('class', 'col-sm');
     var input1 = document.createElement("input");
-    input1.setAttribute('type','text');
-    input1.setAttribute('class','form-control');
-    input1.setAttribute('id','recipient-name');
-    input1.setAttribute('placeholder','Number');
+    input1.setAttribute('type', 'text');
+    input1.setAttribute('class', 'form-control');
+    input1.setAttribute('id', 'recipient-name');
+    input1.setAttribute('placeholder', 'Number');
     innerDivCol1.appendChild(input1);
 
     var innerDivCol2 = document.createElement("div");
-    innerDivCol2.setAttribute('class','col-sm');
+    innerDivCol2.setAttribute('class', 'col-sm');
     var input2 = document.createElement("input");
-    input2.setAttribute('type','text');
-    input2.setAttribute('class','form-control');
-    input2.setAttribute('id','recipient-name');
-    input2.setAttribute('placeholder','Description');
+    input2.setAttribute('type', 'text');
+    input2.setAttribute('class', 'form-control');
+    input2.setAttribute('id', 'recipient-name');
+    input2.setAttribute('placeholder', 'Description');
     innerDivCol2.appendChild(input2);
 
     var innerDivCol3 = document.createElement("div");
-    innerDivCol3.setAttribute('class','col-sm');
+    innerDivCol3.setAttribute('class', 'col-sm');
     var deleteButton = document.createElement('button');
     deleteButton.setAttribute('class', 'btn btn-danger');
     deleteButton.setAttribute("id", phoneCounter);
@@ -245,5 +301,5 @@ function addPhoneColoumn() {
 
 
 function deleteColoumn(e) {
-    document.getElementById('outerDiv'+e.target.id).outerHTML = "";
+    document.getElementById('outerDiv' + e.target.id).outerHTML = "";
 }

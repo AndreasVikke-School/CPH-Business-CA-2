@@ -63,7 +63,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation")
             })
     public List<PersonDTO> getAll() {
@@ -83,7 +83,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -117,7 +117,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -194,7 +194,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
@@ -282,7 +282,7 @@ public class PersonResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = Person.class)),
+                                schema = @Schema(implementation = PersonDTO.class)),
                         responseCode = "200", description = "Successful Operation"),
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",

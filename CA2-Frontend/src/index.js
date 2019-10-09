@@ -40,7 +40,7 @@ function getHobby() {
 }
 
 function getFetchData1(hobbyid) {
-    fetch("/ca2/api/hobby/persons/" + hobbyid) //Need correct API when its made.
+    fetch("http://localhost:8080/ca2/api/person/all") //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
@@ -74,7 +74,7 @@ function getHobbyCount() {
 }
 
 function getFetchData3(hobby) {
-    fetch("/CA2/api/hobby/count/" + hobby) //Need correct API when its made.
+    fetch("http://localhost:8080/ca2/api/person/all") //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
@@ -115,7 +115,7 @@ function loadHobbyOptions1() {
             for (var i in data) {
                 var option = document.createElement('option');
                 option.setAttribute('value', data[i].id);
-                option.innerHTML = data[i].navn;
+                option.innerHTML = data[i].name;
                 document.getElementById("inputGroupHobby1").appendChild(option);
             }
         })
@@ -130,7 +130,7 @@ function loadHobbyOptions2() {
             for (var i in data) {
                 var option = document.createElement('option');
                 option.setAttribute('value', data[i].id);
-                option.innerHTML = data[i].navn;
+                option.innerHTML = data[i].name;
                 document.getElementById("inputGroupHobby2").appendChild(option);
             }
         })
@@ -144,7 +144,6 @@ function loadCityOptions() {
         .then(res => res.json())
         .then(data => {
             for (var i in data) {
-                console.log(data[i]);
                 var option = document.createElement('option');
                 option.setAttribute('value', data[i].id);
                 option.innerHTML = data[i].navn;

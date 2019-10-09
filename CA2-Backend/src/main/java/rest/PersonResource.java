@@ -191,25 +191,25 @@ public class PersonResource {
             throw new WebApplicationException("Person Not Found", 404);
         }
 
-        if (obj.getPhones().isEmpty() || obj.getPhones() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
+//        if (obj.getPhones().isEmpty() || obj.getPhones() == null) {
+//            throw new WebApplicationException("Invalid Input", 400);
+//        }
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
             Phone ph = new Phone(phone.getNumber(), phone.getDescription());
+            ph = pFACADE.add(ph);
             phones.add(ph);
-            pFACADE.add(ph);
         }
 
-        if (obj.getAddress() == null
-                || obj.getAddress().getStreet().isEmpty()
-                || obj.getAddress().getStreet() == null
-                || obj.getAddress().getCityInfo().getCity().isEmpty()
-                || obj.getAddress().getCityInfo().getCity() == null
-                || obj.getAddress().getCityInfo().getZip().isEmpty()
-                || obj.getAddress().getCityInfo().getZip() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
+//        if (obj.getAddress() == null
+//                || obj.getAddress().getStreet().isEmpty()
+//                || obj.getAddress().getStreet() == null
+//                || obj.getAddress().getCityInfo().getCity().isEmpty()
+//                || obj.getAddress().getCityInfo().getCity() == null
+//                || obj.getAddress().getCityInfo().getZip().isEmpty()
+//                || obj.getAddress().getCityInfo().getZip() == null) {
+//            throw new WebApplicationException("Invalid Input", 400);
+//        }
         CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
                 obj.getAddress().getCityInfo().getCity());
 
@@ -226,14 +226,15 @@ public class PersonResource {
         if (obj.getHobbies().isEmpty() || obj.getHobbies() == null) {
             throw new WebApplicationException("Invalid Input", 400);
         }
+        
         List<Hobby> hobby = new ArrayList();
         for (HobbyDTO h : obj.getHobbies()) {
             Hobby ho = new Hobby(h.getName(), h.getDescription());
-            ho = hFACADE.add(ho);
             hobby.add(ho);
+            hFACADE.add(ho);
         }
-
-        if (obj.getFirsName().isEmpty() || obj.getFirsName() == null
+        //Hobby skal være over her
+         if (obj.getFirsName().isEmpty() || obj.getFirsName() == null
                 || obj.getLastName().isEmpty() || obj.getLastName() == null) {
             throw new WebApplicationException("Invalid Input", 400);
         }
@@ -241,6 +242,7 @@ public class PersonResource {
         p.setFirsName(obj.getFirsName());
         p.setLastName(obj.getLastName());
         p.setHobbies(hobby);
+        p.setPhones(phones);
 
         PersonDTO dto = new PersonDTO(FACADE.edit(p));
 

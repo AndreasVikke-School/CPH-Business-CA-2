@@ -14,8 +14,10 @@ import entities.Phone;
 import entities.dto.AddressDTO;
 import entities.dto.CityInfoDTO;
 import entities.dto.HobbyDTO;
+import entities.dto.InfoEntityDTO;
 import entities.dto.PersonDTO;
 import entities.dto.PhoneDTO;
+import facades.PersonFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
@@ -165,12 +167,13 @@ public class PersonResourceTest {
     //@Disabled
     @Test
     public void testAdd200() throws Exception {
+        PersonDTO person = new PersonDTO("Gilli", "Fjall", new ArrayList<HobbyDTO>(), 
+                        new InfoEntityDTO(0, "mail@mail.dk", new ArrayList<PhoneDTO>(), 
+                                new AddressDTO(0, "Balagervej", new CityInfoDTO(0, "4321", "Viby J"))));
+        
         given()
                 .contentType("application/json")
-                .body(
-                        new PersonDTO("Gilli", "Fjall", new ArrayList<HobbyDTO>(), 
-                        new InfoEntity("mail@mail.dk", new ArrayList<Phone>(), 
-                                new Address("Balagervej", new CityInfo("4321", "Viby J")))))
+                .body(person)
                 .post("/person/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())

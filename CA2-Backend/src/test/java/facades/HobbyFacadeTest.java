@@ -15,6 +15,7 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
@@ -22,6 +23,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
+//@Disabled
 public class HobbyFacadeTest {
     
     private static EntityManagerFactory emf;

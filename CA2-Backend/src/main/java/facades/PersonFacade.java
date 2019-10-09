@@ -90,7 +90,7 @@ public class PersonFacade implements IFacade<Person> {
         return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.phones phone WHERE phone.number = :number", Person.class).setParameter("number", phone).getSingleResult();
     }
 
-    public List<Person> getPersonsByCity(String city) {
-        return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.address a WHERE a.cityInfo.city = :city", Person.class).setParameter("city", city).getResultList();
+    public List<Person> getPersonsByCity(String zip) {
+        return getEntityManager().createQuery("SELECT person FROM Person person JOIN person.address a WHERE a.cityInfo.zip = :zip", Person.class).setParameter("zip", zip).getResultList();
     }
 }

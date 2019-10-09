@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 
 window.onload = () => {
-    document.getElementById("output").append(createTable([{ "firstname": "Andreas", "lastname": "Vikke"},
-    { "firstname": "Emil", "lastname": "Svensmark"}]));
+    document.getElementById("output").append(createTable([{ "firstname": "Andreas", "lastname": "Vikke" },
+    { "firstname": "Emil", "lastname": "Svensmark" }]));
 
     loadHobbyOptions1();
     loadHobbyOptions2();
@@ -44,7 +44,7 @@ function getFetchData1(hobbyid) {
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data));
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -52,16 +52,16 @@ function getFetchData1(hobbyid) {
 //City Button
 //Sets .output to a table with all persons from a city
 function getCity() {
-    var city = document.getElementById("inputGroupCity1").value;
-    getFetchData2(city);
+    var zip = document.getElementById("inputGroupCity1").value;
+    getFetchData2(zip);
 }
 
-function getFetchData2(city) {
-    fetch("/CA2/api/Cities/" + city) //Need correct API when its made.
+function getFetchData2(zip) {
+    fetch("http://localhost:8080/ca2/api/person/findByZip/" + zip)
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data));
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -69,16 +69,16 @@ function getFetchData2(city) {
 //Hobby Count Button
 //Sets .output to a number equal to the amount of people from a city
 function getHobbyCount() {
-    var hobby = document.getElementById("inputGroupSelect03").value;
+    var hobby = document.getElementById("inputGroupHobby2").value;
     getFetchData3(hobby);
 }
 
-function getFetchData3(hobby) {
-    fetch("http://localhost:8080/ca2/api/person/all") //Need correct API when its made.
+function getFetchData3(hobbyid) {
+    fetch("http://localhost:8080/ca2/api/hobby/personCount/" + hobbyid)
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
-            document.getElementById("output").appendChild(createTable(data)); //needs a better method
+            document.getElementById("output").append(createTable(data));
         })
 }
 
@@ -101,7 +101,7 @@ function getZipcodes() {
                 zipcodes.push(obj);
             }
             document.getElementById("output").innerHTML = "<div id=\"output2\" class=\"table-wrapper-scroll-y my-custom-scrollbar\"></div >";
-            document.getElementById("output2").appendChild(createTable(zipcodes));
+            document.getElementById("output2").append(createTable(zipcodes));
         })
 }
 
@@ -158,6 +158,9 @@ function loadCityOptions() {
 function createTable(array) {
     if (!Array.isArray(array)) {
         array = [array];
+    }
+    if (array.length <= 0) {
+        return document.createElement("p").innerHTML = "No persons found ..";
     }
 
     var table = document.createElement("table");

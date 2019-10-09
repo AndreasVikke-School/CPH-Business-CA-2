@@ -203,4 +203,16 @@ public class HobbyResource {
         }
         return true;
     }
+    
+    @GET
+    @Path("personCount/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonCountByID(@PathParam("id") long id){
+        if (id <= 0) {
+            throw new WebApplicationException("Invalid id", 400);
+        }   
+        return Response.status(200)
+                .entity("{\"count\" : \""+FACADE.getPersonCountByHobby(id)+"\"}").type(MediaType.APPLICATION_JSON).build();
+    }
+    
 }

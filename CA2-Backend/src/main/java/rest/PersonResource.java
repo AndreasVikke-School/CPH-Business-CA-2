@@ -308,5 +308,18 @@ public class PersonResource {
                 .entity("{\"code\" : \"200\", \"message\" : \"Person with id: " + p.getId()
                         + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
     }
+    
+    
+    @GET
+    @Path("/findByZip/{zip}")
+    @Produces(MediaType.APPLICATION_JSON)   
+    public List<PersonDTO> getByZip(@PathParam("zip") String zip) {
+        List<Person> pers = FACADE.getPersonsByCity(zip);
+        List<PersonDTO> dto = new ArrayList();
+        for (Person person : pers) {
+            dto.add(new PersonDTO(person));
+        }
+        return dto;
+    }
 
 }

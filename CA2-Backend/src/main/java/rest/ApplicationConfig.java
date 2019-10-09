@@ -52,6 +52,7 @@ public class ApplicationConfig extends Application {
         resources.add(rest.PersonResource.class);
         resources.add(rest.PhoneResource.class);
         resources.add(rest.cors.CorsRequestFilter.class);
+        resources.add(rest.cors.CorsResponseFilter.class);
     }
 
 }

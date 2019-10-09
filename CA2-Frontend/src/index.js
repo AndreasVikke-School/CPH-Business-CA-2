@@ -124,7 +124,7 @@ function loadHobbyOptions1() {
 //Sets the Options of hobbies to available hobbies
 //from end point all hobbies.
 function loadHobbyOptions2() {
-    fetch("/ca2/api/hobby/all")
+    fetch("http://localhost:8080/ca2/api/hobby/all")
         .then(res => res.json())
         .then(data => {
             for (var i in data) {

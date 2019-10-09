@@ -47,7 +47,7 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
@@ -77,7 +77,7 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = Phone.class))),
+                        array = @ArraySchema(schema = @Schema(implementation = PhoneDTO.class))),
                         responseCode = "200", description = "Succesful operation")}
     )
     public List<PhoneDTO> getAll() {
@@ -97,7 +97,7 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 
@@ -122,7 +122,7 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = Phone.class)),
+                        schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
                         schema = @Schema(implementation = ExceptionDTO.class)), 

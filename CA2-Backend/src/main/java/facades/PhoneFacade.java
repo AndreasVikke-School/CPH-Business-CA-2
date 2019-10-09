@@ -4,6 +4,7 @@ import entities.Phone;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import managers.FacadeManager;
 
 /**
  *
@@ -42,10 +43,15 @@ public class PhoneFacade implements IFacade<Phone> {
     @Override
     public Phone add(Phone phone) {
         EntityManager em = getEntityManager();
+        Phone p = FacadeManager.getSingleResult(em.createQuery("SELECT p FROM Phone p WHERE p.number = :number", Phone.class).setParameter("number", phone.getNumber()));
         try {
-            em.getTransaction().begin();
-            em.persist(phone);
-            em.getTransaction().commit();
+            if(p == null) {
+                em.getTransaction().begin();
+                em.persist(phone);
+                em.getTransaction().commit();
+            } else {
+                phone = p;
+            }
             return phone;
         } finally {
             em.close();

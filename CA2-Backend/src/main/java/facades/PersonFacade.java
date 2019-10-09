@@ -44,15 +44,15 @@ public class PersonFacade implements IFacade<Person> {
     public Person add(Person person) {
         EntityManager em = getEntityManager();
         Person p = FacadeManager.getSingleResult(em.createQuery("SELECT person FROM Person person WHERE person.firstName = :firstName AND person.lastName = :lastName", Person.class).setParameter("firstName", person.getFirsName()).setParameter("lastName", person.getLastName()));
-        if (p == null) {
-            try {
+        try {
+            if (p == null) {
                 p = person;
                 em.getTransaction().begin();
                 em.persist(p);
                 em.getTransaction().commit();
-            } finally {
-                em.close();
             }
+        } finally {
+            em.close();
         }
         return p;
     }

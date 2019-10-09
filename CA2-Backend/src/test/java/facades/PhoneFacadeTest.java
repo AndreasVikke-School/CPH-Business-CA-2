@@ -22,7 +22,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
-//@Disabled
+@Disabled
 public class PhoneFacadeTest {
     
     private static EntityManagerFactory emf;

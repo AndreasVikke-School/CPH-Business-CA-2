@@ -187,6 +187,9 @@ function createTable(array) {
                 });
                 tBRow.insertCell(index).innerHTML = objS.join(", ");
             }
+            else if(Array.isArray(obj[key])) {
+                tBRow.insertCell(index).innerHTML = objS.join(", ");
+            }
             else
                 tBRow.insertCell(index).innerHTML = obj[key];
         });

@@ -21,8 +21,8 @@ public class CompanyDTO extends InfoEntityDTO {
     @Schema(required = true, example = "5000000")
     private long marketValue;
 
-    public CompanyDTO(String name, String description, String cvr, int employeeCount, long marketValue, InfoEntity infoEntity) {
-        super(infoEntity);
+    public CompanyDTO(String name, String description, String cvr, int employeeCount, long marketValue, InfoEntityDTO infoEntityDTO) {
+        super(infoEntityDTO.getId(), infoEntityDTO.getEmail(), infoEntityDTO.getPhones(), infoEntityDTO.getAddress());
         this.name = name;
         this.description = description;
         this.cvr = cvr;

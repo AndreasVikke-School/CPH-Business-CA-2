@@ -7,17 +7,17 @@ package rest;
 
 import entities.Address;
 import entities.CityInfo;
+import entities.Company;
 import entities.Hobby;
 import entities.InfoEntity;
 import entities.Person;
 import entities.Phone;
 import entities.dto.AddressDTO;
 import entities.dto.CityInfoDTO;
+import entities.dto.CompanyDTO;
 import entities.dto.HobbyDTO;
 import entities.dto.InfoEntityDTO;
-import entities.dto.PersonDTO;
 import entities.dto.PhoneDTO;
-import facades.PersonFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
@@ -43,14 +43,11 @@ import utils.EMF_Creator;
  *
  * @author William
  */
-//@Disabled
-public class PersonResourceTest {
-
+public class CompanyResourceTest {
+    
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Person person, person2;
-    Hobby h = new Hobby("Test", "test");
-    private List<HobbyDTO> hobs = new ArrayList();
+    private static Company company, company2;
     
     
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
@@ -82,7 +79,7 @@ public class PersonResourceTest {
         EMF_Creator.endREST_TestWithDB();
         httpServer.shutdownNow();
     }
-
+    
     // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
@@ -98,132 +95,128 @@ public class PersonResourceTest {
         Address address = new Address("Hellerupvej", ci);
         InfoEntity ie = new InfoEntity("Email@email.com", phones, address);
         InfoEntity ie2 = new InfoEntity("Email@email.com", phones2, address);
-        Hobby hobby = new Hobby("Revolutionist", "I like to start revoultions");
-        List<Hobby> hobbies = new ArrayList();
-        hobbies.add(hobby);
-
-        person = new Person("William", "Rester", hobbies, ie);
-        person2 = new Person("Ronald", "Reagan", hobbies, ie2);
+        company = new Company("Himmelriget", "Making sure you don't get to heaven", "00000", 1, 80085, ie);
+        company2 = new Company("Bilka", "Hvem ka'", "09234500", 8000, 8000000, ie2);
+        
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
             em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Address.deleteAllRows").executeUpdate();
             em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Company.deleteAllRows").executeUpdate();
             em.persist(phone);
             em.persist(phone2);
             em.persist(ci);
             em.persist(address);
             em.persist(ie);
             em.persist(ie2);
-            em.persist(hobby);
-            em.persist(person);
-            em.persist(person2);
+            em.persist(company);
+            em.persist(company2);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-
-    @Test
-    public void testGetById200() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/person/" + person.getId()).then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("firsName", equalTo(person.getFirsName()));
-    }
-
-    @Test
-    public void testGetById400() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/person/-1").then()
-                .assertThat()
-                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
-    }
-
-    @Test
-    public void testGetById404() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/person/69").then()
-                .assertThat()
-                .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
-    }
-
+    
     @Test
     public void testGetAll200() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/person/all").then()
+                .get("/company/all").then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("size()", equalTo(2));
+    }
+    
+    //@Disabled
+    @Test
+    public void testGetById200() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/company/" + company.getId()).then()
                 .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode()).body("size()", equalTo(2));
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("name", equalTo(company.getName()));
+    }
+    
+    @Test
+    public void testGetById400() throws Exception {
+        given()
+                .contentType("applicaiton/json")
+                .get("/company/0").then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
+    }
+    
+    @Test
+    public void testGetById404() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/company/87").then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
     
     @Test
     public void testAdd200() throws Exception {
-        PersonDTO person = new PersonDTO("Gilli", "Fjall", new ArrayList<HobbyDTO>(), 
-                        new InfoEntityDTO(0, "mail@mail.dk", new ArrayList<PhoneDTO>(), 
-                                new AddressDTO(0, "Balagervej", new CityInfoDTO(0, "4321", "Viby J"))));
+        CompanyDTO company = new CompanyDTO("Netbeans Inc", "Making IDE's that semi-work", "7563943", 10, 150, 
+                new InfoEntityDTO(0, "netbeans@mail.com", new ArrayList<PhoneDTO>(), 
+                        new AddressDTO(0, "Jydevej", new CityInfoDTO(0, "Aalborg", "8000"))));
         
         given()
                 .contentType("application/json")
-                .body(person)
-                .post("/person/add").then()
+                .body(company)
+                .post("company/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("firsName", equalTo("Gilli"));
-                }
+                .body("name", equalTo("Netbeans Inc"));
+    }
     
     @Test
     public void testAdd400() throws Exception {
-    PersonDTO person = new PersonDTO("Gilli", "Fjall", new ArrayList<HobbyDTO>(), 
-                        new InfoEntityDTO(0, "", new ArrayList<PhoneDTO>(), 
-                                new AddressDTO(0, "Balagervej", new CityInfoDTO(0, "4321", "Viby J"))));
+        CompanyDTO company = new CompanyDTO(null, "Making IDE's that semi-work", "7563943", 10, 150, 
+                new InfoEntityDTO(0, "netbeans@mail.com", new ArrayList<PhoneDTO>(), 
+                        new AddressDTO(0, "Jydevej", new CityInfoDTO(0, "Aalborg", "8000"))));
         
         given()
                 .contentType("application/json")
-                .body(person)
-                .post("/person/add").then()
+                .body(company)
+                .post("company/add").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
-                
         
-        PersonDTO person2 = new PersonDTO(null, "Fjall", new ArrayList<HobbyDTO>(), 
-                        new InfoEntityDTO(0, "mail@mail.dk", new ArrayList<PhoneDTO>(), 
-                                new AddressDTO(0, "Balagervej", new CityInfoDTO(0, "4321", "Viby J"))));
+        CompanyDTO company2 = new CompanyDTO("Netbeans inc", "Making IDE's that semi-work", "7563943", 10, 150, 
+                new InfoEntityDTO(0, "netbeans@mail.com", null, 
+                        new AddressDTO(0, "Jydevej", new CityInfoDTO(0, "Aalborg", "8000"))));
         
         given()
                 .contentType("application/json")
-                .body(person2)
-                .post("/person/add").then()
+                .body(company2)
+                .post("company/add").then()
                 .assertThat()
-                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
-                }
-    
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());;
+        
+    }
     
     @Test
     public void testEdit200() throws Exception {
-        person.setFirsName("Michael");
+        company.setName("ChangedName");
+        
         given()
-               .contentType("application/json")
-               .body(new PersonDTO(person))
-               .put("/person/edit/" + person.getId()).then()
-               .assertThat()
-               .statusCode(HttpStatus.OK_200.getStatusCode())
-               .body("firsName", equalTo("Michael"));
+                .contentType("application/json")
+                .body(company)
+                .put("/company/edit/" + company.getId()).then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("name", equalTo("ChangedName"));
     }
     
     @Test
     public void testEdit400() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PersonDTO(person))
-                .put("/person/edit/0").then()
+                .body(company)
+                .put("/company/edit/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
@@ -232,18 +225,17 @@ public class PersonResourceTest {
     public void testEdit404() throws Exception {
         given()
                 .contentType("application/json")
-                .body(new PersonDTO(person))
-                .put("/person/edit/74").then()
+                .body(company)
+                .put("/company/edit/88").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }
-
-
+    
     @Test
     public void testDelete200() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/person/delete/" + person.getId()).then()
+                .delete("/company/delete/" + company.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("code", equalTo("200"));
@@ -253,16 +245,16 @@ public class PersonResourceTest {
     public void testDelete400() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/person/delete/0").then()
+                .delete("/company/delete/0").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode());
     }
-
+    
     @Test
     public void testDelete404() throws Exception {
         given()
                 .contentType("application/json")
-                .delete("/person/delete/69").then()
+                .delete("/company/delete/88").then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND_404.getStatusCode());
     }

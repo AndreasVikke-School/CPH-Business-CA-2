@@ -174,14 +174,18 @@ public class CompanyResource {
                         responseCode = "404", description = "Hobby not found")
             })
     public CompanyDTO editCompany(@PathParam("id") long id, CompanyDTO obj) {
+        //Checks for a valid Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid Input", 400);
         }
+        
+        //get's a company by it's Id and checks if it exists 
         Company c = FACADE.getById(id);
         if (c == null) {
             throw new WebApplicationException("Company not Found", 404);
         }
         
+        //checks if all inputs are valid, method at the bottom
         if(!validateCompanyDTO(obj)){
             throw new WebApplicationException("Invalid Input", 400);
         }
@@ -197,6 +201,8 @@ public class CompanyResource {
         Address address = new Address(obj.getAddress().getStreet(), ci);
         address = aFACADE.add(address);
 
+        //sets everything to the company from what was recieved
+        //from the ComanyDTO
         c.setName(obj.getName());
         c.setDescription(obj.getDescription());
         c.setCvr(obj.getCvr());
@@ -206,6 +212,7 @@ public class CompanyResource {
         c.setEmail(obj.getEmail());
         c.setPhones(phones);
 
+        //finally, creates a new DTO and edits the company. 
         CompanyDTO dto = new CompanyDTO(FACADE.edit(c));
 
         return dto;
@@ -232,7 +239,16 @@ public class CompanyResource {
                         responseCode = "404", description = "Hobby not found")
             })
     public Response deleteCompany(@PathParam("id") long id) {
+        //Checks whether the provided Id is valid (eg. above 0)
+        if(id <= 0){
+            throw new WebApplicationException("Invalid Id", 400);
+        }
+        
+        //Gets the company by its id, and checks whether the company exists.
         Company c = FACADE.getById(id);
+        if(c == null){
+            throw new WebApplicationException("Company not found", 404);
+        }
         FACADE.delete(c.getId());
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Company with id: " + c.getId()

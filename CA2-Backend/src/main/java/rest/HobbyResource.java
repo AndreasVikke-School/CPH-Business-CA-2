@@ -84,10 +84,12 @@ public class HobbyResource {
                         responseCode = "404", description = "Hobby not found")
             })
     public HobbyDTO getByID(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid id", 400);
         }
-
+        
+        //Gets a hobby and checks if it exists. 
         Hobby hobby = FACADE.getById(id);
         if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);
@@ -145,10 +147,11 @@ public class HobbyResource {
                 responseCode = "404", description = "Hobby not found")
             })
     public HobbyDTO editHobby(@PathParam("id") long id, HobbyDTO hobbydto) {
+        //Validates Id and validates all user inputs.
         if (id <= 0 || !validateHobbyDTO(hobbydto)) {
             throw new WebApplicationException("Invalid Id", 400);
         }
-
+        //Checks if user exists
         Hobby hobby = FACADE.getById(id);
         if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);
@@ -181,10 +184,12 @@ public class HobbyResource {
                         responseCode = "404", description = "Hobby not Found")
             })
     public Response deleteHobby(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid ID provided", 400);
         }
-
+        
+        //Gets a hobby and checks if exists.
         Hobby hobby = FACADE.getById(id);
         if (hobby == null) {
             throw new WebApplicationException("Hobby not found", 404);

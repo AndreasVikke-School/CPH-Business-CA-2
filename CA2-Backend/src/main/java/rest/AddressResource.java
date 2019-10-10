@@ -61,10 +61,12 @@ public class AddressResource {
                         responseCode = "404", description = "Address not found")}
     )
     public AddressDTO getById(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
-
+        
+        //checks if address exists.
         Address address = FACADE.getById(id);
         if (address == null) {
             throw new WebApplicationException("Address not found", 404);
@@ -109,6 +111,7 @@ public class AddressResource {
                         responseCode = "400", description = "Invalid input")}
     )
     public AddressDTO add(AddressDTO addressdto) throws WebApplicationException {
+        //Validates all address info from user, method at bottom. 
         if (!validateAddressDTO(addressdto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
@@ -137,10 +140,12 @@ public class AddressResource {
                         responseCode = "404", description = "Address not found")}
     )
     public AddressDTO edit(@PathParam("id") long id, AddressDTO addressdto) {
+        //validates Id, checks if user inputs ok. 
         if (id <= 0 || !validateAddressDTO(addressdto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
-
+        
+        //checks if address exists,
         Address a = FACADE.getById(id);
         if (a == null) {
             throw new WebApplicationException("Address not found", 404);

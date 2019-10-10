@@ -134,10 +134,11 @@ public class PhoneResource {
                         responseCode = "404", description = "Phone not found")}
     )
     public PhoneDTO edit(@PathParam("id") long id, PhoneDTO phonedto) {
+        //validates Id and inputs from the user. 
         if (id <= 0 || !validatePhoneDTO(phonedto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
-
+        //checks if phone exists.
         Phone p = FACADE.getById(id);
         if (p == null) {
             throw new WebApplicationException("Phone not found", 404);

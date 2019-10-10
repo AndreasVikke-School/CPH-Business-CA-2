@@ -142,7 +142,7 @@ public class PersonResource {
         }
 
         // Create Address
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(), obj.getAddress().getCityInfo().getCity());
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
         address = aFACADE.add(address);
 

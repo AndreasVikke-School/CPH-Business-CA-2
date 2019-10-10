@@ -6,9 +6,12 @@ import entities.Company;
 import entities.InfoEntity;
 import entities.Phone;
 import entities.dto.CompanyDTO;
+import entities.dto.PersonDTO;
 import entities.dto.PhoneDTO;
 import errorhandling.dto.ExceptionDTO;
+import facades.AddressFacade;
 import facades.CompanyFacade;
+import facades.PhoneFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,6 +46,8 @@ public class CompanyResource {
             "ax2",
             EMF_Creator.Strategy.CREATE);
     private static final CompanyFacade FACADE = CompanyFacade.getCompanyFacade(EMF);
+    private static final AddressFacade aFACADE = AddressFacade.getAddressFacade(EMF);
+    private static final PhoneFacade pFACADE = PhoneFacade.getPhoneFacade(EMF);
 
     @GET
     @Path("/all")
@@ -118,15 +123,21 @@ public class CompanyResource {
                         responseCode = "404", description = "Hobby not found")
             })
     public CompanyDTO addCompany(CompanyDTO obj) {
-        List<Phone> phones = new ArrayList();
-        for (PhoneDTO ph : obj.getPhones()) {
-            phones.add(new Phone(ph.getNumber(), ph.getDescription()));
+        if (!validateCompanyDTO(obj)) {
+            throw new WebApplicationException("Invalid Input", 400);
         }
 
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
-                obj.getAddress().getCityInfo().getCity());
-
+        // Create List of Phones
+        List<Phone> phones = new ArrayList();
+        for (PhoneDTO phone : obj.getPhones()) {
+            phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
+        }
+        
+         // Create Address
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
+        address = aFACADE.add(address);
+
 
         InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
 
@@ -135,9 +146,9 @@ public class CompanyResource {
                 obj.getCvr(),
                 obj.getEmployeeCount(),
                 obj.getMarketValue(), ie);
-        
+
         CompanyDTO dto = new CompanyDTO(FACADE.add(c));
-        
+
         return dto;
 
     }
@@ -163,35 +174,40 @@ public class CompanyResource {
                         responseCode = "404", description = "Hobby not found")
             })
     public CompanyDTO editCompany(@PathParam("id") long id, CompanyDTO obj) {
-        if(id <= 0){
+        if (id <= 0) {
             throw new WebApplicationException("Invalid Input", 400);
         }
         Company c = FACADE.getById(id);
-        if(c == null){
+        if (c == null) {
             throw new WebApplicationException("Company not Found", 404);
         }
         
-         List<Phone> phones = new ArrayList();
-        for (PhoneDTO ph : obj.getPhones()) {
-            phones.add(new Phone(ph.getNumber(), ph.getDescription()));
+        if(!validateCompanyDTO(obj)){
+            throw new WebApplicationException("Invalid Input", 400);
         }
         
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
-                obj.getAddress().getCityInfo().getCity());
-
-        Address address = new Address(obj.getAddress().getStreet(), ci);
-
-        InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
+           // Create List of Phones
+        List<Phone> phones = new ArrayList();
+        for (PhoneDTO phone : obj.getPhones()) {
+            phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
+        }
         
+         // Create Address
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
+        Address address = new Address(obj.getAddress().getStreet(), ci);
+        address = aFACADE.add(address);
+
         c.setName(obj.getName());
         c.setDescription(obj.getDescription());
         c.setCvr(obj.getCvr());
         c.setEmployeeCount(obj.getEmployeeCount());
         c.setMarketValue(obj.getMarketValue());
         c.setAddress(address);
-        
+        c.setEmail(obj.getEmail());
+        c.setPhones(phones);
+
         CompanyDTO dto = new CompanyDTO(FACADE.edit(c));
-        
+
         return dto;
     }
 
@@ -221,6 +237,22 @@ public class CompanyResource {
         return Response.status(200)
                 .entity("{\"code\" : \"200\", \"message\" : \"Company with id: " + c.getId()
                         + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
-    
+
+    }
+
+    private boolean validateCompanyDTO(CompanyDTO c) {
+        if (c.getPhones() == null
+                || c.getAddress() == null
+                || c.getAddress().getStreet() == null || c.getAddress().getStreet().isEmpty()
+                || c.getAddress().getCityInfo().getCity() == null || c.getAddress().getCityInfo().getCity().isEmpty()
+                || c.getAddress().getCityInfo().getZip() == null || c.getAddress().getCityInfo().getZip().isEmpty()
+                || c.getEmail() == null || c.getEmail().isEmpty()
+                || c.getCvr() == null || c.getCvr().isEmpty()
+                || c.getDescription() == null || c.getDescription().isEmpty()
+                || c.getEmployeeCount() <= 0  
+                || c.getName() == null || c.getName().isEmpty() ) {
+            return false;
+        }
+        return true;
     }
 }

@@ -6,8 +6,10 @@ import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
 import entities.InfoEntity;
+import static entities.InfoEntity_.address;
 import entities.Person;
 import entities.Phone;
+import entities.dto.AddressDTO;
 import entities.dto.HobbyDTO;
 import entities.dto.PersonDTO;
 import entities.dto.PhoneDTO;
@@ -132,13 +134,13 @@ public class PersonResource {
         if (!validatePersonDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
-        
+
         // Create List of Phones
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
             phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
-        
+
         // Create Address
         CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
@@ -191,58 +193,33 @@ public class PersonResource {
             throw new WebApplicationException("Person Not Found", 404);
         }
 
-//        if (obj.getPhones().isEmpty() || obj.getPhones() == null) {
-//            throw new WebApplicationException("Invalid Input", 400);
-//        }
+        if (!validatePersonDTO(obj)) {
+            throw new WebApplicationException("Invalid Input", 400);
+        }
+
+        // Create List of Phones
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
-            Phone ph = new Phone(phone.getNumber(), phone.getDescription());
-            ph = pFACADE.add(ph);
-            phones.add(ph);
+            phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
 
-//        if (obj.getAddress() == null
-//                || obj.getAddress().getStreet().isEmpty()
-//                || obj.getAddress().getStreet() == null
-//                || obj.getAddress().getCityInfo().getCity().isEmpty()
-//                || obj.getAddress().getCityInfo().getCity() == null
-//                || obj.getAddress().getCityInfo().getZip().isEmpty()
-//                || obj.getAddress().getCityInfo().getZip() == null) {
-//            throw new WebApplicationException("Invalid Input", 400);
-//        }
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
-                obj.getAddress().getCityInfo().getCity());
-
+        // Create Address
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
+        address = aFACADE.add(address);
 
-        aFACADE.add(address);
-
-        if (obj.getEmail().isEmpty() || obj.getEmail() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-
-        InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
-
-        if (obj.getHobbies().isEmpty() || obj.getHobbies() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-        
+        // Create Hobby
         List<Hobby> hobby = new ArrayList();
         for (HobbyDTO h : obj.getHobbies()) {
-            Hobby ho = new Hobby(h.getName(), h.getDescription());
-            hobby.add(ho);
-            hFACADE.add(ho);
-        }
-        //Hobby skal være over her
-         if (obj.getFirsName().isEmpty() || obj.getFirsName() == null
-                || obj.getLastName().isEmpty() || obj.getLastName() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
+            hobby.add(hFACADE.add(new Hobby(h.getName(), h.getDescription())));
         }
 
         p.setFirsName(obj.getFirsName());
         p.setLastName(obj.getLastName());
         p.setHobbies(hobby);
         p.setPhones(phones);
+        p.setAddress(address);
+        p.setEmail(obj.getEmail());
 
         PersonDTO dto = new PersonDTO(FACADE.edit(p));
 

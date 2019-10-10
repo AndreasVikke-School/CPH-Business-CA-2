@@ -43,6 +43,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
+@Disabled
 public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;

@@ -57,10 +57,11 @@ public class PhoneResource {
                         responseCode = "404", description = "Phone not found")}
     )
     public PhoneDTO getById(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
-
+        //Gets a phone, and checks if it exists.
         Phone phone = FACADE.getById(id);
         if (phone == null) {
             throw new WebApplicationException("Phone not found", 404);
@@ -104,6 +105,7 @@ public class PhoneResource {
                         responseCode = "400", description = "Invalid input")}
     )
     public PhoneDTO add(PhoneDTO phonedto) throws WebApplicationException {
+        //Validates everything needed, method at bottom.
         if (!validatePhoneDTO(phonedto)) {
             throw new WebApplicationException("Invalid input", 400);
         }

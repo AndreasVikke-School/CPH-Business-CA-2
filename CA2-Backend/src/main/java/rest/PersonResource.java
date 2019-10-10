@@ -97,13 +97,14 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public PersonDTO getById(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid input", 400);
         }
-
+        //Gets a person, and checks if person exists
         Person p = FACADE.getById(id);
         if (p == null) {
-            throw new WebApplicationException("Person Not Found", 400);
+            throw new WebApplicationException("Person Not Found", 404);
         }
 
         PersonDTO dto = new PersonDTO(p);
@@ -183,16 +184,18 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public PersonDTO editPerson(@PathParam("id") long id, PersonDTO obj) {
-
+        //Validates id
         if (id <= 0) {
             throw new WebApplicationException("invalid Input", 400);
         }
 
+        //Gets the person by id, and checks whether the person exists.
         Person p = FACADE.getById(id);
         if (p == null) {
             throw new WebApplicationException("Person Not Found", 404);
         }
-
+        
+        //Method at the bottom, checks everything else. 
         if (!validatePersonDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
@@ -213,7 +216,8 @@ public class PersonResource {
         for (HobbyDTO h : obj.getHobbies()) {
             hobby.add(hFACADE.add(new Hobby(h.getName(), h.getDescription())));
         }
-
+        
+        //sets all the changes.
         p.setFirsName(obj.getFirsName());
         p.setLastName(obj.getLastName());
         p.setHobbies(hobby);
@@ -248,10 +252,11 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public Response deletePerson(@PathParam("id") long id) {
+        //validates id
         if (id <= 0) {
             throw new WebApplicationException("invalid Input", 400);
         }
-
+        //gets a person, and checks whether the person exists
         Person p = FACADE.getById(id);
         if (p == null) {
             throw new WebApplicationException("Person Not Found", 404);

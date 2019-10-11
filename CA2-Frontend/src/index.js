@@ -29,6 +29,9 @@ window.onload = () => {
 
     var phoneButton = document.getElementById("phoneBtn");
     phoneButton.addEventListener("click", addPhoneColoumn);
+
+    var createPersonBtn = document.getElementById("createPersonBtn");
+    createPersonBtn.addEventListener("click", createPerson);
 }
 
 
@@ -182,7 +185,7 @@ function createTable(array) {
             if (typeof obj[key] === 'object') {
                 var objS = [];
                 Object.keys(obj[key]).map(k => {
-                    if(typeof obj[key][k] === 'object')
+                    if (typeof obj[key][k] === 'object')
                         Object.keys(obj[key][k]).map(l => {
                             objS.push(obj[key][k][l])
                         });
@@ -193,7 +196,7 @@ function createTable(array) {
             }
             else if (Array.isArray(obj[key])) {
                 var objS = [];
-                for(var i = 0; i < obj[key].length; i++) {
+                for (var i = 0; i < obj[key].length; i++) {
                     Object.keys(obj[key][i]).map(k => {
                         if (k != "id")
                             objS.push(obj[key][i][k])
@@ -243,7 +246,7 @@ function addHobbyColoumn() {
     var input1 = document.createElement("input");
     input1.setAttribute('type', 'text');
     input1.setAttribute('class', 'form-control');
-    input1.setAttribute('id', 'recipient-name');
+    input1.setAttribute('id', 'hobbyname'+hobbyCounter);
     input1.setAttribute('placeholder', 'Name');
     innerDivCol1.appendChild(input1);
 
@@ -252,7 +255,7 @@ function addHobbyColoumn() {
     var input2 = document.createElement("input");
     input2.setAttribute('type', 'text');
     input2.setAttribute('class', 'form-control');
-    input2.setAttribute('id', 'recipient-name');
+    input2.setAttribute('id', 'hobbydesc'+hobbyCounter);
     input2.setAttribute('placeholder', 'Description');
     innerDivCol2.appendChild(input2);
 
@@ -287,7 +290,7 @@ function addPhoneColoumn() {
     var input1 = document.createElement("input");
     input1.setAttribute('type', 'text');
     input1.setAttribute('class', 'form-control');
-    input1.setAttribute('id', 'recipient-name');
+    input1.setAttribute('id', 'number'+phoneCounter);
     input1.setAttribute('placeholder', 'Number');
     innerDivCol1.appendChild(input1);
 
@@ -296,7 +299,7 @@ function addPhoneColoumn() {
     var input2 = document.createElement("input");
     input2.setAttribute('type', 'text');
     input2.setAttribute('class', 'form-control');
-    input2.setAttribute('id', 'recipient-name');
+    input2.setAttribute('id', 'phonedesc'+phoneCounter);
     input2.setAttribute('placeholder', 'Description');
     innerDivCol2.appendChild(input2);
 
@@ -319,4 +322,62 @@ function addPhoneColoumn() {
 
 function deleteColoumn(e) {
     document.getElementById('outerDiv' + e.target.id).outerHTML = "";
+}
+
+
+//Get the values of all the phone inputs returns a string
+function getPhonesJson() {
+    var jsonString = "";
+    for (var i = 0; i < phoneCounter; ++i) {
+        jsonString += "\"number\": \"" + document.getElementById("number-"+i) + "\", ";
+        jsonString += "\"description\": \"" + document.getElementById("phonedesc-"+i) + "\"";
+    }
+    return jsonString;
+}
+
+//Get the values of all the hobby inputs returns a string
+function getHobbiesJson() {
+    var jsonString = "";
+    for (var i = 0; i < hobbyCounter; ++i) {
+        jsonString += "\"name\": \"" + document.getElementById("hobbyname"+i) + "\", ";
+        jsonString += "\"description\": \"" + document.getElementById("hobbydesc"+i) + "\"";
+    }
+    return jsonString;
+}
+
+//Creates a person with the json aswell as the strings of phones and hobbies
+function createPerson() {
+    var phonesJson = getPhonesJson();
+    var hobbiesJson = getHobbiesJson();
+    let options = {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: document.getElementById("emailInput"),
+            phones: [
+                {
+                    phonesJson
+                }
+            ],
+            address: {
+                street: document.getElementById("streetNameInput"),
+                cityInfo: {
+                    city: document.getElementById("cityNameInput"),
+                    zip: document.getElementById("zipCodeInput")
+                }
+            },
+            firsName: document.getElementById("firstNameInput"),
+            lastName: document.getElementById("lastNameInput"),
+            hobbies: [
+                {
+                    hobbiesJson
+                }
+            ]
+        })
+    }
+
+    fetch("http://localhost:8080/ca2/api/person/add", options);
 }

@@ -68,6 +68,26 @@ public class CompanyResource {
         }
         return dto;
     }
+    
+    @GET
+    @Path("/getByCount/{value}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all Companies with more than x employees",
+            tags = {"company"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = CompanyDTO.class)),
+                        responseCode = "200", description = "Succesfull operation")
+
+            })
+     public List<CompanyDTO> getAllByCount(@PathParam("value") int value) {
+         List<CompanyDTO> dto = new ArrayList();
+         for (Company c : FACADE.getCompanyWithMoreThanPersons(value)){
+             dto.add(new CompanyDTO(c));
+         }
+         return dto;
+     }
 
     @GET
     @Path("/{id}")

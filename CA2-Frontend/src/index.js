@@ -219,13 +219,14 @@ function getCompanyList() {
 }
 
 function getFetchData4(amount) {
-    fetch("/CA2/api") //Need correct API when its made.
+    fetch("http://localhost:8080/ca2/api/company/getByCount/" + amount) //Need correct API when its made.
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").innerHTML = "";
             document.getElementById("output").appendChild(createTable(data)); //needs a better method
         })
 }
+
 
 
 var hobbyCounter = 0;

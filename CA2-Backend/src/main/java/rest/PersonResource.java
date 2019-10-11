@@ -6,7 +6,6 @@ import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
 import entities.InfoEntity;
-import static entities.InfoEntity_.address;
 import entities.Person;
 import entities.Phone;
 import entities.dto.AddressDTO;

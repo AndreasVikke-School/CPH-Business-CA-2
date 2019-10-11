@@ -91,4 +91,8 @@ public class CompanyFacade implements IFacade<Company> {
     public Company getByCVR(String cvr) {
         return getEntityManager().createQuery("SELECT company FROM Company company WHERE company.cvr = :cvr", Company.class).setParameter("cvr", cvr).getSingleResult();
     }
+    
+    public List<Company> getCompanyWithMoreThanPersons(int value){
+        return getEntityManager().createQuery("SELECT company FROM Company company WHERE company.employeeCount >= :value", Company.class).setParameter("value", value).getResultList();
+    }
 }

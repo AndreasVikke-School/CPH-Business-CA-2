@@ -25,7 +25,7 @@ import utils.EMF_Creator.Strategy;
  * @author William
  */
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -208,11 +208,11 @@ public class PersonFacadeTest {
     }
 
     
-    @Disabled
+    //@Disabled
     @Test
     public void testGetPersonsByCity() {
         
-        assertEquals(people, facade.getPersonsByCity("Hellerup"));
+        assertEquals(people.size(), facade.getPersonsByCity("2900").size());
         
     }
 }

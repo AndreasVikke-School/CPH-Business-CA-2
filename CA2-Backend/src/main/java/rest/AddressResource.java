@@ -46,7 +46,7 @@ public class AddressResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all adrress",
+    @Operation(summary = "Get single adrress by id",
             tags = {"address"},
             responses = {
                 @ApiResponse(

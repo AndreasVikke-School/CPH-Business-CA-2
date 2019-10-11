@@ -26,7 +26,7 @@ import utils.EMF_Creator;
  *
  * @author William
  */
-@Disabled
+//@Disabled
 public class CompanyFacadeTest {
 
     private static EntityManagerFactory emf;

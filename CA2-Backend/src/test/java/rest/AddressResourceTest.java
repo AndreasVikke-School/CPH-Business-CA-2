@@ -26,7 +26,7 @@ import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 public class AddressResourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -73,6 +73,7 @@ public class AddressResourceTest {
         a2 = new Address("Streetname 2", ci);
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
             em.createNamedQuery("Address.deleteAllRows").executeUpdate();
             em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
             em.persist(ci);

@@ -19,6 +19,7 @@ import facades.HobbyFacade;
 import facades.PersonFacade;
 import facades.PhoneFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -60,14 +61,14 @@ public class PersonResource {
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets a single person by their id",
+    @Operation(summary = "Get all persons",
             tags = {"person"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = PersonDTO.class)),
-                        responseCode = "200", description = "Successful Operation")
-            })
+                                array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))),
+                        responseCode = "200", description = "Succesful operation")}
+    )
     public List<PersonDTO> getAll() {
         List<PersonDTO> dto = new ArrayList();
 
@@ -115,7 +116,7 @@ public class PersonResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets a single person by their id",
+    @Operation(summary = "Gets all persons",
             tags = {"person"},
             responses = {
                 @ApiResponse(
@@ -194,7 +195,7 @@ public class PersonResource {
         if (p == null) {
             throw new WebApplicationException("Person Not Found", 404);
         }
-        
+
         //Method at the bottom, checks everything else. 
         if (!validatePersonDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
@@ -216,7 +217,7 @@ public class PersonResource {
         for (HobbyDTO h : obj.getHobbies()) {
             hobby.add(hFACADE.add(new Hobby(h.getName(), h.getDescription())));
         }
-        
+
         //sets all the changes.
         p.setFirsName(obj.getFirsName());
         p.setLastName(obj.getLastName());
@@ -271,8 +272,16 @@ public class PersonResource {
     @GET
     @Path("/findByZip/{zip}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all persons by a zip code",
+            tags = {"person get"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))),
+                        responseCode = "200", description = "Succesful operation")}
+    )
     public List<PersonDTO> getByZip(@PathParam("zip") String zip) {
-        List<Person> pers = FACADE.getPersonsByCity(zip);
+        List<Person> pers = FACADE.getPersonsByCity(zip);        
         List<PersonDTO> dto = new ArrayList();
         for (Person person : pers) {
             dto.add(new PersonDTO(person));

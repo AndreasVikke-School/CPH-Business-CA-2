@@ -208,11 +208,11 @@ public class PersonFacadeTest {
     }
 
     
-    @Disabled
+    //@Disabled
     @Test
     public void testGetPersonsByCity() {
         
-        assertEquals(people, facade.getPersonsByCity("Hellerup"));
+        assertEquals(people.size(), facade.getPersonsByCity("2900").size());
         
     }
 }

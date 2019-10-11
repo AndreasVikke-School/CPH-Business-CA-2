@@ -6,8 +6,10 @@ import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
 import entities.InfoEntity;
+import static entities.InfoEntity_.address;
 import entities.Person;
 import entities.Phone;
+import entities.dto.AddressDTO;
 import entities.dto.HobbyDTO;
 import entities.dto.PersonDTO;
 import entities.dto.PhoneDTO;
@@ -17,6 +19,7 @@ import facades.HobbyFacade;
 import facades.PersonFacade;
 import facades.PhoneFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,14 +61,14 @@ public class PersonResource {
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets a single person by their id",
+    @Operation(summary = "Get all persons",
             tags = {"person"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = PersonDTO.class)),
-                        responseCode = "200", description = "Successful Operation")
-            })
+                                array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))),
+                        responseCode = "200", description = "Succesful operation")}
+    )
     public List<PersonDTO> getAll() {
         List<PersonDTO> dto = new ArrayList();
 
@@ -95,13 +98,14 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public PersonDTO getById(@PathParam("id") long id) {
+        //Validates Id
         if (id <= 0) {
             throw new WebApplicationException("Invalid input", 400);
         }
-
+        //Gets a person, and checks if person exists
         Person p = FACADE.getById(id);
         if (p == null) {
-            throw new WebApplicationException("Person Not Found", 400);
+            throw new WebApplicationException("Person Not Found", 404);
         }
 
         PersonDTO dto = new PersonDTO(p);
@@ -112,7 +116,7 @@ public class PersonResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets a single person by their id",
+    @Operation(summary = "Gets all persons",
             tags = {"person"},
             responses = {
                 @ApiResponse(
@@ -129,57 +133,32 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public PersonDTO addPerson(PersonDTO obj) {
-
-        if (obj.getPhones() == null || obj.getPhones().isEmpty()) {
+        if (!validatePersonDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
+
+        // Create List of Phones
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
-            Phone ph = new Phone(phone.getNumber(), phone.getDescription());
-            phones.add(ph);
-            pFACADE.add(ph);
+            phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
 
-        if (obj.getAddress() == null
-                || obj.getAddress().getStreet().isEmpty()
-                || obj.getAddress().getStreet() == null
-                || obj.getAddress().getCityInfo().getCity().isEmpty()
-                || obj.getAddress().getCityInfo().getCity() == null
-                || obj.getAddress().getCityInfo().getZip().isEmpty()
-                || obj.getAddress().getCityInfo().getZip() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
-                obj.getAddress().getCityInfo().getCity());
+        // Create Address
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
+        Address address = new Address(obj.getAddress().getStreet(), ci);
+        address = aFACADE.add(address);
 
-        Address address = new Address(obj.getAddress().getStreet(),
-                ci);
-
-        aFACADE.add(address);
-
-        if (obj.getEmail().isEmpty() || obj.getEmail() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-
+        // Create InfoEntity
         InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
 
-        if (obj.getHobbies().isEmpty() || obj.getHobbies() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
+        // Create Hobby
         List<Hobby> hobby = new ArrayList();
         for (HobbyDTO h : obj.getHobbies()) {
-            Hobby ho = new Hobby(h.getName(), h.getDescription());
-            ho = hFACADE.add(ho);
-            hobby.add(ho);
+            hobby.add(hFACADE.add(new Hobby(h.getName(), h.getDescription())));
         }
 
-        if (obj.getFirsName().isEmpty() || obj.getFirsName() == null
-                || obj.getLastName().isEmpty() || obj.getLastName() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-
+        // Create Person
         Person p = new Person(obj.getFirsName(), obj.getLastName(), hobby, ie);
-
         PersonDTO dto = new PersonDTO(FACADE.add(p));
 
         return dto;
@@ -206,66 +185,46 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public PersonDTO editPerson(@PathParam("id") long id, PersonDTO obj) {
-
+        //Validates id
         if (id <= 0) {
             throw new WebApplicationException("invalid Input", 400);
         }
 
+        //Gets the person by id, and checks whether the person exists.
         Person p = FACADE.getById(id);
         if (p == null) {
             throw new WebApplicationException("Person Not Found", 404);
         }
 
-        if (obj.getPhones().isEmpty() || obj.getPhones() == null) {
+        //Method at the bottom, checks everything else. 
+        if (!validatePersonDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
+
+        // Create List of Phones
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
-            Phone ph = new Phone(phone.getNumber(), phone.getDescription());
-            phones.add(ph);
-            pFACADE.add(ph);
+            phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
 
-        if (obj.getAddress() == null
-                || obj.getAddress().getStreet().isEmpty()
-                || obj.getAddress().getStreet() == null
-                || obj.getAddress().getCityInfo().getCity().isEmpty()
-                || obj.getAddress().getCityInfo().getCity() == null
-                || obj.getAddress().getCityInfo().getZip().isEmpty()
-                || obj.getAddress().getCityInfo().getZip() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getCity(),
-                obj.getAddress().getCityInfo().getCity());
-
+        // Create Address
+        CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
+        address = aFACADE.add(address);
 
-        aFACADE.add(address);
-
-        if (obj.getEmail().isEmpty() || obj.getEmail() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
-
-        InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
-
-        if (obj.getHobbies().isEmpty() || obj.getHobbies() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
-        }
+        // Create Hobby
         List<Hobby> hobby = new ArrayList();
         for (HobbyDTO h : obj.getHobbies()) {
-            Hobby ho = new Hobby(h.getName(), h.getDescription());
-            ho = hFACADE.add(ho);
-            hobby.add(ho);
-        }
-        
-         if (obj.getFirsName().isEmpty() || obj.getFirsName() == null
-                || obj.getLastName().isEmpty() || obj.getLastName() == null) {
-            throw new WebApplicationException("Invalid Input", 400);
+            hobby.add(hFACADE.add(new Hobby(h.getName(), h.getDescription())));
         }
 
+        //sets all the changes.
         p.setFirsName(obj.getFirsName());
         p.setLastName(obj.getLastName());
         p.setHobbies(hobby);
+        p.setPhones(phones);
+        p.setAddress(address);
+        p.setEmail(obj.getEmail());
 
         PersonDTO dto = new PersonDTO(FACADE.edit(p));
 
@@ -294,12 +253,13 @@ public class PersonResource {
                         responseCode = "404", description = "Person not found")
             })
     public Response deletePerson(@PathParam("id") long id) {
-        if(id <= 0){
+        //validates id
+        if (id <= 0) {
             throw new WebApplicationException("invalid Input", 400);
         }
-        
+        //gets a person, and checks whether the person exists
         Person p = FACADE.getById(id);
-        if(p == null){
+        if (p == null) {
             throw new WebApplicationException("Person Not Found", 404);
         }
         FACADE.delete(id);
@@ -308,13 +268,20 @@ public class PersonResource {
                 .entity("{\"code\" : \"200\", \"message\" : \"Person with id: " + p.getId()
                         + " was deleted sucesfully\"}").type(MediaType.APPLICATION_JSON).build();
     }
-    
-    
+
     @GET
     @Path("/findByZip/{zip}")
-    @Produces(MediaType.APPLICATION_JSON)   
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all persons by a zip code",
+            tags = {"person get"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))),
+                        responseCode = "200", description = "Succesful operation")}
+    )
     public List<PersonDTO> getByZip(@PathParam("zip") String zip) {
-        List<Person> pers = FACADE.getPersonsByCity(zip);
+        List<Person> pers = FACADE.getPersonsByCity(zip);        
         List<PersonDTO> dto = new ArrayList();
         for (Person person : pers) {
             dto.add(new PersonDTO(person));
@@ -322,4 +289,18 @@ public class PersonResource {
         return dto;
     }
 
+    private boolean validatePersonDTO(PersonDTO persondto) {
+        if (persondto.getPhones() == null
+                || persondto.getAddress() == null
+                || persondto.getAddress().getStreet() == null || persondto.getAddress().getStreet().isEmpty()
+                || persondto.getAddress().getCityInfo().getCity() == null || persondto.getAddress().getCityInfo().getCity().isEmpty()
+                || persondto.getAddress().getCityInfo().getZip() == null || persondto.getAddress().getCityInfo().getZip().isEmpty()
+                || persondto.getEmail() == null || persondto.getEmail().isEmpty()
+                || persondto.getHobbies() == null
+                || persondto.getFirsName() == null || persondto.getFirsName().isEmpty()
+                || persondto.getLastName() == null || persondto.getLastName().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }

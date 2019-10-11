@@ -182,13 +182,24 @@ function createTable(array) {
             if (typeof obj[key] === 'object') {
                 var objS = [];
                 Object.keys(obj[key]).map(k => {
-                    if (k != "id")
+                    if(typeof obj[key][k] === 'object')
+                        Object.keys(obj[key][k]).map(l => {
+                            objS.push(obj[key][k][l])
+                        });
+                    else if (k != "id")
                         objS.push(obj[key][k])
                 });
                 tBRow.insertCell(index).innerHTML = objS.join(", ");
             }
-            else if(Array.isArray(obj[key])) {
-                tBRow.insertCell(index).innerHTML = objS.join(", ");
+            else if (Array.isArray(obj[key])) {
+                var objS = [];
+                for(var i = 0; i < obj[key].length; i++) {
+                    Object.keys(obj[key][i]).map(k => {
+                        if (k != "id")
+                            objS.push(obj[key][i][k])
+                    });
+                    tBRow.insertCell(index).innerHTML = objS.join(", ");
+                }
             }
             else
                 tBRow.insertCell(index).innerHTML = obj[key];

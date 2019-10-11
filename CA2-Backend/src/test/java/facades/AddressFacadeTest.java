@@ -21,7 +21,7 @@ import utils.EMF_Creator.Strategy;
  * @author William
  */
 //Uncomment the line below, to temporarily disable this test
-
+//@Disabled
 public class AddressFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -67,10 +67,11 @@ public class AddressFacadeTest {
         addresses = new ArrayList();
         try {
             em.getTransaction().begin();
-
+            
+            em.createNamedQuery("InfoEntity.deleteAllRows").executeUpdate();
             em.createNamedQuery("Address.deleteAllRows").executeUpdate();
             em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
-
+            
             CityInfo ci = new CityInfo("2900", "Hellerup");
             em.persist(ci);
 

@@ -45,16 +45,16 @@ public class HobbyFacade implements IFacade<Hobby> {
     public Hobby add(Hobby hobby) {
         EntityManager em = getEntityManager();
         Hobby h = FacadeManager.getSingleResult(em.createQuery("SELECT hobby FROM Hobby hobby WHERE hobby.name = :name AND hobby.description = :description", Hobby.class).setParameter("name", hobby.getName()).setParameter("description", hobby.getDescription()));
-        if (h == null) {
-            try {
+        try {
+            if (h == null) {
                 em.getTransaction().begin();
                 em.persist(hobby);
                 em.getTransaction().commit();
-            } finally {
-                em.close();
+            } else {
+                hobby = h;
             }
-        } else {
-            hobby = h;
+        } finally {
+            em.close();
         }
         return hobby;
     }

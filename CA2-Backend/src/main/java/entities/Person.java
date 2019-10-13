@@ -1,9 +1,11 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 
@@ -16,7 +18,7 @@ import javax.persistence.NamedQuery;
 public class Person extends InfoEntity implements Serializable {
     private String firstName;
     private String lastName;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Hobby> hobbies;
     
     public Person() {

@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 
 @Path("phone")
 public class PhoneResource {
-    
+
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
             "pu",
             "jdbc:mysql://localhost:3307/ca2",
@@ -47,13 +47,13 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = PhoneDTO.class)),
+                                schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Phone not found")}
     )
     public PhoneDTO getById(@PathParam("id") long id) {
@@ -78,7 +78,7 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = PhoneDTO.class))),
+                                array = @ArraySchema(schema = @Schema(implementation = PhoneDTO.class))),
                         responseCode = "200", description = "Succesful operation")}
     )
     public List<PhoneDTO> getAll() {
@@ -98,10 +98,10 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = PhoneDTO.class)),
+                                schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid input")}
     )
     public PhoneDTO add(PhoneDTO phonedto) throws WebApplicationException {
@@ -124,13 +124,13 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = PhoneDTO.class)),
+                                schema = @Schema(implementation = PhoneDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid input"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Phone not found")}
     )
     public PhoneDTO edit(@PathParam("id") long id, PhoneDTO phonedto) {
@@ -158,13 +158,13 @@ public class PhoneResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)),
+                                schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Phone not found")}
     )
     public Response delete(@PathParam("id") long id) {
@@ -182,7 +182,7 @@ public class PhoneResource {
                 .entity("{\"code\" : \"200\", \"message\" : \"Phone with id: " + phone.getId() + " deleted successfully.\"}")
                 .type(MediaType.APPLICATION_JSON).build();
     }
-    
+
     private boolean validatePhoneDTO(PhoneDTO phonedto) {
         if (phonedto == null
                 || phonedto.getNumber() == null || phonedto.getDescription() == null

@@ -34,7 +34,8 @@ import utils.EMF_Creator;
  */
 @Path("address")
 public class AddressResource {
-     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
+
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
             "pu",
             "jdbc:mysql://localhost:3307/ca2",
             "dev",
@@ -51,13 +52,13 @@ public class AddressResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = AddressDTO.class)),
+                                schema = @Schema(implementation = AddressDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Address not found")}
     )
     public AddressDTO getById(@PathParam("id") long id) {
@@ -65,7 +66,7 @@ public class AddressResource {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Id supplied", 400);
         }
-        
+
         //checks if address exists.
         Address address = FACADE.getById(id);
         if (address == null) {
@@ -74,8 +75,7 @@ public class AddressResource {
 
         return new AddressDTO(address);
     }
-    
-    
+
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class AddressResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = AddressDTO.class))),
+                                array = @ArraySchema(schema = @Schema(implementation = AddressDTO.class))),
                         responseCode = "200", description = "Succesful operation")}
     )
     public List<AddressDTO> getAll() {
@@ -104,10 +104,10 @@ public class AddressResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = AddressDTO.class)),
+                                schema = @Schema(implementation = AddressDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid input")}
     )
     public AddressDTO add(AddressDTO addressdto) throws WebApplicationException {
@@ -130,13 +130,13 @@ public class AddressResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = AddressDTO.class)),
+                                schema = @Schema(implementation = AddressDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid input"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Address not found")}
     )
     public AddressDTO edit(@PathParam("id") long id, AddressDTO addressdto) {
@@ -144,7 +144,7 @@ public class AddressResource {
         if (id <= 0 || !validateAddressDTO(addressdto)) {
             throw new WebApplicationException("Invalid input", 400);
         }
-        
+
         //checks if address exists,
         Address a = FACADE.getById(id);
         if (a == null) {
@@ -165,13 +165,13 @@ public class AddressResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)),
+                                schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "200", description = "Succesful operation"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "400", description = "Invalid Id supplied"),
                 @ApiResponse(content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = ExceptionDTO.class)), 
+                        schema = @Schema(implementation = ExceptionDTO.class)),
                         responseCode = "404", description = "Address not found")}
     )
     public Response delete(@PathParam("id") long id) {
@@ -189,7 +189,7 @@ public class AddressResource {
                 .entity("{\"code\" : \"200\", \"message\" : \"Address with id: " + address.getId() + " deleted successfully.\"}")
                 .type(MediaType.APPLICATION_JSON).build();
     }
-    
+
     private boolean validateAddressDTO(AddressDTO addressdto) {
         if (addressdto == null
                 || addressdto.getStreet() == null || addressdto.getCityInfo() == null

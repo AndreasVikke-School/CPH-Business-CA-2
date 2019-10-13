@@ -3,10 +3,12 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.Hobby;
+import entities.Person;
 import entities.dto.HobbyDTO;
 import errorhandling.dto.ExceptionDTO;
 import facades.HobbyFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,7 +52,7 @@ public class HobbyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = HobbyDTO.class)),
+                                array = @ArraySchema(schema = @Schema(implementation = HobbyDTO.class))),
                         responseCode = "200", description = "Succesfull operation")
 
             })
@@ -218,6 +220,24 @@ public class HobbyResource {
         }
         return Response.status(200)
                 .entity("{\"count\" : \"" + FACADE.getPersonCountByHobby(id) + "\"}").type(MediaType.APPLICATION_JSON).build();
+    }
+    
+    @GET
+    @Path("persons/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get perosns in given hobby",
+            tags = {"hobby get"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json",
+                                array = @ArraySchema(schema = @Schema(implementation = HobbyDTO.class))),
+                        responseCode = "200", description = "Successful operation")
+            })
+    public List<Person> getPersonsByID(@PathParam("id") long id) {
+        if (id <= 0) {
+            throw new WebApplicationException("Invalid id", 400);
+        }
+        return FACADE.getPersonsByHobby(id);
     }
 
     private boolean validateHobbyDTO(HobbyDTO hobbydto) {

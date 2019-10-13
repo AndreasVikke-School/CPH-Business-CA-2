@@ -13,6 +13,7 @@ import facades.AddressFacade;
 import facades.CompanyFacade;
 import facades.PhoneFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,7 +58,7 @@ public class CompanyResource {
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = CompanyDTO.class)),
+                                array = @ArraySchema(schema = @Schema(implementation = CompanyDTO.class))),
                         responseCode = "200", description = "Succesfull operation")
 
             })
@@ -68,7 +69,7 @@ public class CompanyResource {
         }
         return dto;
     }
-    
+
     @GET
     @Path("/getByCount/{value}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -81,13 +82,13 @@ public class CompanyResource {
                         responseCode = "200", description = "Succesfull operation")
 
             })
-     public List<CompanyDTO> getAllByCount(@PathParam("value") int value) {
-         List<CompanyDTO> dto = new ArrayList();
-         for (Company c : FACADE.getCompanyWithMoreThanPersons(value)){
-             dto.add(new CompanyDTO(c));
-         }
-         return dto;
-     }
+    public List<CompanyDTO> getAllByCount(@PathParam("value") int value) {
+        List<CompanyDTO> dto = new ArrayList();
+        for (Company c : FACADE.getCompanyWithMoreThanPersons(value)) {
+            dto.add(new CompanyDTO(c));
+        }
+        return dto;
+    }
 
     @GET
     @Path("/{id}")
@@ -152,12 +153,11 @@ public class CompanyResource {
         for (PhoneDTO phone : obj.getPhones()) {
             phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
-        
-         // Create Address
+
+        // Create Address
         CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
         address = aFACADE.add(address);
-
 
         InfoEntity ie = new InfoEntity(obj.getEmail(), phones, address);
 
@@ -198,25 +198,25 @@ public class CompanyResource {
         if (id <= 0) {
             throw new WebApplicationException("Invalid Input", 400);
         }
-        
+
         //get's a company by it's Id and checks if it exists 
         Company c = FACADE.getById(id);
         if (c == null) {
             throw new WebApplicationException("Company not Found", 404);
         }
-        
+
         //checks if all inputs are valid, method at the bottom
-        if(!validateCompanyDTO(obj)){
+        if (!validateCompanyDTO(obj)) {
             throw new WebApplicationException("Invalid Input", 400);
         }
-        
-           // Create List of Phones
+
+        // Create List of Phones
         List<Phone> phones = new ArrayList();
         for (PhoneDTO phone : obj.getPhones()) {
             phones.add(pFACADE.add(new Phone(phone.getNumber(), phone.getDescription())));
         }
-        
-         // Create Address
+
+        // Create Address
         CityInfo ci = new CityInfo(obj.getAddress().getCityInfo().getZip(), obj.getAddress().getCityInfo().getCity());
         Address address = new Address(obj.getAddress().getStreet(), ci);
         address = aFACADE.add(address);
@@ -260,13 +260,13 @@ public class CompanyResource {
             })
     public Response deleteCompany(@PathParam("id") long id) {
         //Checks whether the provided Id is valid (eg. above 0)
-        if(id <= 0){
+        if (id <= 0) {
             throw new WebApplicationException("Invalid Id", 400);
         }
-        
+
         //Gets the company by its id, and checks whether the company exists.
         Company c = FACADE.getById(id);
-        if(c == null){
+        if (c == null) {
             throw new WebApplicationException("Company not found", 404);
         }
         FACADE.delete(c.getId());
@@ -285,8 +285,8 @@ public class CompanyResource {
                 || c.getEmail() == null || c.getEmail().isEmpty()
                 || c.getCvr() == null || c.getCvr().isEmpty()
                 || c.getDescription() == null || c.getDescription().isEmpty()
-                || c.getEmployeeCount() <= 0  
-                || c.getName() == null || c.getName().isEmpty() ) {
+                || c.getEmployeeCount() <= 0
+                || c.getName() == null || c.getName().isEmpty()) {
             return false;
         }
         return true;

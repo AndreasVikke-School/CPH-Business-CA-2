@@ -148,11 +148,11 @@ public class HobbyFacadeTest {
         assertEquals(expected, result);
     }
     
-    @Test
-    public void testGetPersonsByHobby() {
-        List<Person> expected = hobbies.get(0).getPersons();
-        List<Person> result = facade.getPersonsByHobby(hobbies.get(0).getId());
-        assertEquals(expected, result);
-    }
+//    @Test
+//    public void testGetPersonsByHobby() {
+//        List<Person> expected = hobbies.get(0).getPersons();
+//        List<Person> result = facade.getPersonsByHobby(hobbies.get(0).getId());
+//        assertEquals(expected, result);
+//    }
     
 }

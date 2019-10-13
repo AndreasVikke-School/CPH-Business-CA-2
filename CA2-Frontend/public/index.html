@@ -31,7 +31,8 @@
       <div class="col-sm">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <button class="btn btn-dark" type="button" id="hobbyBtn">Generate</button>
+            <button class="btn btn-dark" type="button" id="hobbyBtn">Get Persons</button>
+            <button class="btn btn-dark" type="button" id="countBtn">Get Count</button>
           </div>
           <select class="custom-select" id="inputGroupHobby1" aria-label="Example select with button addon">
             <option selected disabled>Persons with a hobby...</option>
@@ -47,29 +48,6 @@
           <input type="text" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" placeholder="Persons with given Zipcode, i.e. 2800"
             id="inputGroupCity1">
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <button class="btn btn-dark" type="button" id="countBtn">Generate</button>
-          </div>
-          <select class="custom-select" id="inputGroupHobby2" aria-label="Example select with button addon">
-            <option selected disabled>Count of people with a hobby...</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="vertical-center">
-      <div class="text-center">
-        <div class="row">
-          <div class="col-sm">
-            <button class="btn btn-dark" id="zipcodesBtn">Get Zipcodes</button>
-          </div>
         </div>
       </div>
     </div>
@@ -93,15 +71,16 @@
       <div class="text-center">
         <div class="row">
           <div class="col-sm">
-            <button type="button" class="btn btn-dark" id="zipcodesBtn" data-toggle="modal"
-              data-target="#exampleModal">New Person</button>
+            <button class="btn btn-dark" id="allBtn">Get All Persons</button>
+            <button type="button" class="btn btn-dark" id="modalBtn" data-toggle="modal" data-target="#newPersonModal">New Person</button>
+              <button class="btn btn-dark" id="zipcodesBtn">Get All Zipcodes</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="newPersonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -112,23 +91,23 @@
             </button>
           </div>
           <div class="modal-body" id="modalBody">
-            <label for="recipient-name" class="col-form-label">First Name:</label>
-            <input type="text" class="form-control" id="recipient-name" id="firstNameInput">
+            <label for="firstNameInput" class="col-form-label">First Name:</label>
+            <input type="text" class="form-control"  id="firstNameInput">
 
-            <label for="recipient-name" class="col-form-label">Last Name:</label>
-            <input type="text" class="form-control" id="recipient-name" id="lastNameInput">
+            <label for="lastNameInput" class="col-form-label">Last Name:</label>
+            <input type="text" class="form-control" id="lastNameInput">
 
-            <label for="recipient-name" class="col-form-label">Zipcode:</label>
-            <input type="text" class="form-control" id="recipient-name" id="zipCodeInput">
+            <label for="zipCodeInput" class="col-form-label">Zipcode:</label>
+            <input type="text" class="form-control" id="zipCodeInput">
 
-            <label for="recipient-name" class="col-form-label">City:</label>
-            <input type="text" class="form-control" id="recipient-name" id="cityNameInput">
+            <label for="cityNameInput" class="col-form-label">City:</label>
+            <input type="text" class="form-control" id="cityNameInput">
 
-            <label for="recipient-name" class="col-form-label">Street name:</label>
-            <input type="text" class="form-control" id="recipient-name" id="streetNameInput">
+            <label for="streetNameInput" class="col-form-label">Street name:</label>
+            <input type="text" class="form-control" id="streetNameInput">
 
-            <label for="recipient-name" class="col-form-label">Email:</label>
-            <input type="text" class="form-control" id="recipient-name" id="emailInput">
+            <label for="emailInput" class="col-form-label">Email:</label>
+            <input type="text" class="form-control" id="emailInput">
 
             <div class="row">
 
